@@ -69,7 +69,6 @@ def cal_geary(gdf):
     geary = Geary(hhi, w)
     return geary
 
-
 # ------- Global ----------
 # LISA (Local Moran's I)
 def cal_LISA(gdf):
@@ -131,14 +130,15 @@ def LISA_map(request):
     return HttpResponse(data, content_type='json')
 
 # Gstar Result (Hotspot Area)
+lg_gdf = gdf.copy()
+lg = cal_G_star(lg_gdf)
+lg_gdf['hhi_lg_q']= lg.Zs
+lg_gdf['hhi_lg_sig'] = lg.p_sim
+lg_gdf.loc[lg_gdf['hhi_lg_sig'] > 0.1, 'lg_type'] = 0
+lg_gdf.loc[((lg_gdf.hhi_lg_sig <= 0.1) & (lg_gdf.hhi_lg_q > 0)), 'lg_type'] = 1
+lg_gdf.loc[((lg_gdf.hhi_lg_sig <= 0.1) & (lg_gdf.hhi_lg_q < 0)), 'lg_type'] = 2
+
 def Gstar_map(request):
-    lg_gdf = gdf.copy()
-    lg = cal_G_star(lg_gdf)
-    lg_gdf['hhi_lg_q']= lg.Zs
-    lg_gdf['hhi_lg_sig'] = lg.p_sim
-    lg_gdf.loc[lg_gdf['hhi_lg_sig'] > 0.1, 'lg_type'] = 0
-    lg_gdf.loc[((lg_gdf.hhi_lg_sig <= 0.1) & (lg_gdf.hhi_lg_q > 0)), 'lg_type'] = 1
-    lg_gdf.loc[((lg_gdf.hhi_lg_sig <= 0.1) & (lg_gdf.hhi_lg_q < 0)), 'lg_type'] = 2
     #Change into geojson for map display
     lg_gdf.to_crs(epsg=3857)
     data = lg_gdf.to_json()
@@ -146,10 +146,10 @@ def Gstar_map(request):
 
 # Attribute of Hot Spot Area
 def Hotspot_map(request):
-    lg_gdf = gdf.copy()
-    lg = cal_G_star(lg_gdf)
-    lg_gdf['hhi_lg_q'] = lg.Zs
-    lg_gdf['hhi_lg_sig'] = lg.p_sim
+    #lg_gdf = gdf.copy()
+    #lg = cal_G_star(lg_gdf)
+    #lg_gdf['hhi_lg_q'] = lg.Zs
+    #lg_gdf['hhi_lg_sig'] = lg.p_sim
     # Filter significant areas as clustered areas and create a new dataframe
     sig = lg_gdf[(lg_gdf['hhi_lg_sig'] <= 0.1)]
     test = gpd.geoseries.GeoSeries([geom for geom in sig.unary_union.geoms])
