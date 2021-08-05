@@ -1,0 +1,72 @@
+<div id="rankComponentContainer" class="h-100 w-100 p-1">
+    <h5 style="padding-left: 20px;padding-top: 10px;" v-html="$t('rankareas.ranktitle')"></h5>
+    <hr>
+    <!--define conditions to rank data--->
+    <div class="test-select mb-2">
+        <label class="pl-1" v-html="$t('rankareas.firstep')"></label><br>
+        <p style="padding-left:10px;"><button class="btn btn-warning btn-sm" v-html="$t('rankareas.getGstarData')" v-on:click="getData"></button></p>
+    </div>
+
+    <div >
+        <label class="pl-1" v-html="$t('rankareas.secondstep')"></label>
+        <div class="test-select mb-2">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <p style="padding-left:10px;"><button class="btn btn-warning btn-sm" v-html="$t('rankareas.setconditions')" v-on:click="goToRankCondition"></button></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-select mb-2">
+            <div class="input-group" v-show="showRankCondition">
+                <ul>
+                    <li>
+                        <p v-html="$t('rankareas.restriction')"></p>
+                        <label for="area" v-html="$t('rankareas.areasize')"></label>
+                        <input type="area" id="area" v-model.number="area" />
+                        <label for="parcelcount" v-html="$t('rankareas.parcelsum')"></label>
+                        <input type="parcelcount" id="parcelcount" v-model.number="parcelcount" /><br>
+                    </li>
+                    <br>
+                    <li> 
+                        <p v-html="$t('rankareas.rankevaluation')"></p>
+                        <label class="form-check-label" v-html="$t('rankareas.firstcondition')"></label>
+                        <select name="" id="rank-condition1" v-model="condition_1">
+                            <option value="hhi">HHI</option>
+                            <option value="std">面積標準差</option>
+                            <option value="area_sum">總面積大小</option>
+                        </select>
+                        <br/>
+                        <label class="form-check-label" v-html="$t('rankareas.secondcondition')"></label>
+                        <select name="" id="rank-condition2" v-model="condition_2">
+                            <option value="hhi">HHI</option>
+                            <option value="std">面積標準差</option>
+                            <option value="area_sum">總面積大小</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div style="padding-left:10px;">
+        <p>
+            <button class="btn btn-warning btn-sm" v-html="$t('rankareas.startrank')" v-on:click="addLayer"></button>
+            <button class="btn btn-warning btn-sm" v-html="$t('rankareas.showrank')" v-on:click="goToRankPanel"></button>
+        </p>
+        <p> <button class="btn btn-warning btn-sm" v-html="$t('rankareas.clearrank')" v-on:click="removeLayer"></button></p>
+
+    </div>
+
+    <div id='sidebar'v-show="showRankPanel">
+        <h5 v-html="$t('rankareas.ranklist')"></h5>
+        <hr>
+        <div id='ranklist'>
+            <ul>
+            </ul>
+        </div>
+    </div>
+
+</div>

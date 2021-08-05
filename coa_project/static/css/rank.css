@@ -1,0 +1,40 @@
+#sidebar {
+    position:fixed;
+    top: 20vh;
+    left:160vh;
+    height:50vh;
+    width: 250px;
+    background-color: #696D7D;
+    border-radius: 5px;
+    align-items: center;
+}
+
+#sidebar h5{
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+#ranklist {
+    overflow-y: scroll;
+    max-height: 40vh;
+}
+
+
+#ranklist ul {
+    margin: 0;
+    padding: 10px;
+}
+
+#ranklist li {
+    list-style-type: none;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 3px;
+    cursor: pointer;
+}
+
+#ranklist li:hover {
+    color: #FFD700;
+}
+
+
+

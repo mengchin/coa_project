@@ -1,0 +1,69 @@
+<div id="spatialComponentContainer" class="h-100 w-100 p-1">
+    <!---div class="form-check">
+            <input class="form-check-input" type="checkbox" v-on:click="checkClusterLayer">
+            <label class="form-check-label" v-html="$t('spatialanalysis.showClusterData')"></label>
+    </div --->
+    
+    <div class="test-select mb-2">
+        <!--全域空間分析-->        
+        <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle1')"></h5>
+        <p style="padding-left:10px;">            
+            <select name="" id= "spatialResult" v-model= "globalMethod">                                                                                                                                                                                                                                       
+                <option value="Moran's I Value:">Moran's I</option>
+                <option value="Geary C Value:">Geary C</option>
+            </select> 
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click= "getGlobalData"></button>    
+        </p>
+        <div style="padding-left:10px;"> 
+            {{ globalMethod }} {{ globalData[0] }} <br>
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showMoranPlot')" v-on:click= "showMoransPlot"></button>
+        </div>
+        <hr>
+        <!--區域空間分析-->
+        <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle2')"></h5>
+        <p style="padding-left:10px;">
+            <label class="pl-1" v-html="$t('spatialanalysis.defineMethod')"></label>
+            <select name="" id= "spatialResult" v-model= "spatialMethod">                                                                                                                                                                                                                                       
+                <option value="LISA">LISA</option>
+                <option value="Gstar">Getis Ord G*</option>
+            </select> 
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click = "getSpatialData"></button> <br>
+            <p style="padding-left:10px; line-height: 24px;">
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showSpatialLayer')" v-on:click = "addSpatialLayer"></button> &nbsp;
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeSpatialLayer')" v-on:click = "removeSpatialLayer"></button>
+            </p>
+        </p> 
+        <hr>
+        <!--聚集區計算-->
+        <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.clusterTitle')"></h5>
+        <p style="padding-left:10px;">
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.mergeSpatialParcels')" v-on:click = "getClusterData"></button><br>
+            <p style="padding-left:10px; line-height: 24px;">
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showClusterLayer')" v-on:click = "addClusterLayer"></button> &nbsp;
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeClusterLayer')" v-on:click = "removeClusterLayer"></button>
+            </p>
+        </p>
+    </div>     
+       
+    <div class="morans-container" v-show="MoransPlot">
+            <div class="morans-container-header">
+                <div v-on:click="closeMoransPlot"><i class="fa fa-times" aria-hidden="true"></i></div>
+            </div>
+            <h5 v-html="$t('spatialanalysis.MoranPlot')"></h5> 
+            <div v-html='Moran' style="padding-left: 10px; padding-bottom: 10px;"></div>
+    </div>        
+    
+    <!--空間分析結果圖例-->                                                                                                                                                                                                                                           
+    <!---div class="legend d-flex flex-column">
+        <div>Area-weighted HHI</div>
+        <div v-for="(item,index) in legendColor"><i classs="icon" :style="{ backgroundColor: item.color}"></i><span>{{ item.name }}</span></div>
+    </div--->
+
+    <!--產權聚集區圖例-->                                                                                                                                                                                                                                           
+    <!---div class="legend d-flex flex-column">
+        <div>Area-weighted HHI</div>
+        <div v-for="(item,index) in legendColor"><i classs="icon" :style="{ backgroundColor: item.color}"></i><span>{{ item.name }}</span></div>
+    </div--->
+
+
+</div>

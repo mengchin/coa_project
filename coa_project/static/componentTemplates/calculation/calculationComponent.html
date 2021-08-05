@@ -1,0 +1,26 @@
+<div id="calculationContainer" class="h-100 w-100 p-2"> 
+    <div class="test-select mb-2">
+        <label class="pl-1" v-html="$t('calculation.firststep')"></label><br>
+        <button class="btn btn-warning btn-sm" v-html="$t('calculation.getparcelData')" v-on:click="getDataByMapExtent"></button> 
+    </div>
+    <div>
+        <label class="pl-1" v-html="$t('calculation.secondstep')"></label>
+        <div class="test-select mb-2">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                <button class="btn btn-warning btn-sm" v-html="$t('calculation.start')" v-on:click="goToHHIcalculate"></button>
+                </div>
+            </div>
+        </div>
+        <div class="test-select mb-2">
+            <label v-show="showPanelHHI" class="pl-1" v-html="$t('calculation.thirdstep')"></label>
+            <div class="input-group">
+                <div v-show="showPanelHHI" class="panelHHI">
+                    <button v-html="$t('calculation.choose')" v-on:click="choosePolygonForHHI" class="btn btn-warning btn-sm"></button>
+                    <label class="mb-2 mt-2" v-html="$t('calculation.choosewarning')"></label>
+                    <button v-html="$t('calculation.calculate')" v-on:click="calculateHHI" class="btn btn-warning btn-sm">calculate HHI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

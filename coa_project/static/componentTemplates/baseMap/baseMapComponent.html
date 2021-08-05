@@ -1,0 +1,73 @@
+<div id="baseMapComponentContainer" class="h-100 w-100 p-1"> 
+    <div class="form-check"> 
+        <input class="form-check-input" type="checkbox" v-model="checked"> 
+        <p v-html="$t('basemap.basemapName')"></p>
+
+        <p>
+            <label class="form-check-label" v-html="$t('basemap.classAttributes')"></label>
+            <select name="" id="classifyattributes" v-model="classifyattributes">
+                <option value="taoyuan:taoyuan_hhi">HHI</option>
+                <option value="taoyuan:taoyuan_area">面積</option>
+            </select>    
+
+            <label class="form-check-label" v-html="$t('basemap.classNumber')"></label>
+            <select name="" id="classnumbers" v-model= "classnumbers">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>    
+            <br>
+            <label class="form-check-label" v-html="$t('basemap.classifyMethod')"></label>
+            <select name="" id="class_method" v-model="class_method">
+                <option value="equalinterval">Equal Intervals</option>
+                <option value="jenks">Natural Breaks</option>
+            </select> 
+            <br>
+            <label class="form-check-label" v-html="$t('basemap.opacity')"></label>
+            <select name="" id="layerOpacity" v-model="opacity">
+                <option value="100">100%</option>
+                <option value="80">80%</option>
+                <option value="60">60%</option>
+                <option value="40">40%</option>
+                <option value="20">20%</option>
+                <option value="0">0%</option>
+            </select>
+        </p>  
+
+    </div>
+    
+    <!---label class="pl-1">自行指定分類</label><br>
+    <p style="padding-top:10px;padding-left:10px;">
+        <button class="btn btn-warning btn-sm" v-on:click="getParcels">載入地籍資料</button>
+        <button class="btn btn-warning btn-sm" v-on:click="goToMapClass">指定屬性分類方式</button>
+    </p>
+    
+    <div class="input-group" v-show="showMapClass">
+        <p style="padding-left: 10px;">
+            <label class="form-check-label">分類欄位</label>
+            <select name="" id="classifycolumn">
+                <option value="area_sum">area</option>
+                <option value="aw_hhi"> hhi</option>
+            </select> 
+            <label class="form-check-label">類別數</label>
+            <select name="" id="classnumbers">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select> 
+            <br>
+            <label class="form-check-label">分類方式</label>
+            <select name="" id="classification">
+                <option value="q">Quantile</option>
+                <option value="k"> Natural Breaks</option>
+                <option value="e"> Equal Interval</option>
+            </select> 
+        </p>    
+ 
+        <p style="padding-top:10px;padding-left:10px;"><button class="btn btn-warning" v-on:click="addParcelLayer">展繪圖層</button></p>
+    </div--->
+    
+           
+
+</div>
