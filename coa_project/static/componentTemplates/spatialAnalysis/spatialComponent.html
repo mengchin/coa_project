@@ -7,17 +7,31 @@
     <div class="test-select mb-2">
         <!--全域空間分析-->        
         <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle1')"></h5>
-        <p style="padding-left:10px;">            
+        <!---選擇執行區域---->
+        <form method="get" action='.'>           
+            <select name = "countyname">
+                <option value="zhongli">中壢區</option>
+                <option value="dayuan">大園區</option>
+                <option value="fuxing">復興區</option>
+            </select>
+            <input type="submit" value="選擇該區域" />
+        </form>
+        <!---選擇執行方法---->
+        <p style="padding-left:10px;">    
+            <label class="pl-1" v-html="$t('spatialanalysis.defineMethod')"></label>        
             <select name="" id= "spatialResult" v-model= "globalMethod">                                                                                                                                                                                                                                       
                 <option value="Moran's I Value:">Moran's I</option>
-                <option value="Geary C Value:">Geary C</option>
+                <option value="Geary C Value:">Geary's C</option>
             </select> 
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click= "getGlobalData"></button>    
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeGlobal')" v-on:click= "getGlobalData"></button>
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearGlobal')" v-on:click= "clearGlobalData"></button>    
         </p>
-        <div style="padding-left:10px;"> 
-            {{ globalMethod }} {{ globalData[0] }} <br>
+        <div id= globalResult style="padding-left:10px;"> 
+            {{ globalMethod }} {{ globalData[0] }} <br>            
+        </div> 
+        <p style="padding-left: 10px;">
             <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showMoranPlot')" v-on:click= "showMoransPlot"></button>
-        </div>
+        </p>        
         <hr>
         <!--區域空間分析-->
         <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle2')"></h5>
@@ -27,9 +41,10 @@
                 <option value="LISA">LISA</option>
                 <option value="Gstar">Getis Ord G*</option>
             </select> 
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click = "getSpatialData"></button> <br>
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click = "getSpatialData"></button>&nbsp;
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearSpatial')" v-on:click = "clearSpatialData"></button>
             <p style="padding-left:10px; line-height: 24px;">
-                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showSpatialLayer')" v-on:click = "addSpatialLayer"></button> &nbsp;
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showSpatialLayer')" v-on:click = "addSpatialLayer"></button> 
                 <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeSpatialLayer')" v-on:click = "removeSpatialLayer"></button>
             </p>
         </p> 
@@ -40,17 +55,21 @@
             <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.mergeSpatialParcels')" v-on:click = "getClusterData"></button><br>
             <p style="padding-left:10px; line-height: 24px;">
                 <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showClusterLayer')" v-on:click = "addClusterLayer"></button> &nbsp;
-                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeClusterLayer')" v-on:click = "removeClusterLayer"></button>
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeClusterLayer')" v-on:click = "removeClusterLayer"></button>                                                                                                                                                                                                    
             </p>
+            <p style="padding-left:10px;">
+                <button class="btn btn-info btn-sm" v-html="$t('spatialanalysis.Intro')" v-on:click = "showIntro"></button>
+            </p>            
         </p>
+        
     </div>     
        
     <div class="morans-container" v-show="MoransPlot">
-            <div class="morans-container-header">
-                <div v-on:click="closeMoransPlot"><i class="fa fa-times" aria-hidden="true"></i></div>
-            </div>
-            <h5 v-html="$t('spatialanalysis.MoranPlot')"></h5> 
-            <div v-html='Moran' style="padding-left: 10px; padding-bottom: 10px;"></div>
+        <div class="morans-container-header">
+            <div v-on:click="closeMoransPlot"><i class="fa fa-times" aria-hidden="true"></i></div>
+        </div>
+        <h5 v-html="$t('spatialanalysis.MoranPlot')"></h5> 
+        <div v-html='Moran' style="padding-left: 10px; padding-bottom: 10px;"></div>
     </div>        
     
     <!--空間分析結果圖例-->                                                                                                                                                                                                                                           
@@ -65,5 +84,54 @@
         <div v-for="(item,index) in legendColor"><i classs="icon" :style="{ backgroundColor: item.color}"></i><span>{{ item.name }}</span></div>
     </div--->
 
+    <div class="intro-container" v-show="InfoWindow">
+        <div class="intro-container-header">
+            <div v-on:click="closeIntro"><i class="fa fa-times" aria-hidden="true"></i></div>
+        </div>        
+        <h5>功能敘述</h5>    
+        <b>全域空間自相關分析</b>                                                                                                                                              
+        <h6>Moran's I</h6>
+        <p>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+            Moran's I 為計算空間自相關最常使用的方法。                                                                                                                                          
+            計算後的值介於-1到1之間，正則代表正相關，負則代表負相關。越靠近0則代表相關性越低，空間分佈越接近於隨機分佈。
+            當計算結果呈現正相關時,則代表空間上具有群聚特徵, 因此利用Moran's I 值可以判斷產權複雜衡量指標HHI在空間上的群聚狀況。
+            <img src="/static/image/help/morans.png" alt="Moran's I" style="width:450px;height:200px;">
+        </p>
+        
+        <h6>Geary's C</h6>
+        <p> 
+            Geary's C 方法為另一種計算空間自相關的方法。
+            相較Moran's I 主要比較相鄰點的屬性值和平均值得關係, Geary's C主要在討論相鄰點的屬性值和本身屬性質值的差異。
+            計算後的值介於0到2之間,越接近0代表空間上具有越顯著的群聚特徵, 越接近1則代表隨機分佈,而越接近2則代表特徵為分散分佈。
+            因此，利用Geary C 方法也可以了解產權複雜衡量指標HHI在空間上的分佈情形。
+        </p>
+        <b>區域空間自相關分析</b> 
+        <p>
+            為了解群聚特徵在空間上分佈的位置,將利用區域自相關分析方法找出群聚的地方。 
+        </p>
+        <h6>LISA</h6>   
+            <p>
+                利用區域空間自相關LISA統計分析找出產權複雜衡量指標HHI在空間上的群聚的位置。   
+                <img src="/static/image/help/LISA.png" alt="Moran's I" style="width:400px;height:300px;">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+            </p>   
 
-</div>
+        <h6>Getis Ord G*</h6>                                                                         
+            <p>
+                利用區域空間自相關Getis Ord G*統計分析找出產權複雜衡量指標HHI在空間上的群聚的位置。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                <img src="/static/image/help/Gstar.png" alt="Moran's I" style="width:400px;height:300px;">
+            </p>          
+        <b>產權複雜區</b> 
+            <p>
+                將Getis Ord G* 成果其邊相連且舉有顯著的產權複雜群聚特徵的農地合併後，篩選區域內農地筆數大於5筆的區域，繪製出「產權複雜聚集區」
+            </p>
+        <h6>產權複雜聚集區內屬性</h6> 
+        <p>
+            <ul>
+                <li>面積加權平均(aw_HHI): 聚集區內利用個別農地面積做為權重，計算出該聚集區的面積加權平均HHI。</li>
+                <li>面積標準差(area_std): 聚集區內所有農地面積的標準差。</li>
+                <li>面積標準差(area_sum): 聚集區內所有農地面積的總和，即該聚集區的面積。</li>
+            </ul>        
+        </p>        
+    </div>
+    
+</div>                                                                          

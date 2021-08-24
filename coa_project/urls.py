@@ -16,9 +16,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from geoland.views import index
-from geoland.models import test_shp
+from geoland.views import index, login, logout
+from geoland.models import test_shp 
 from geoland.api import get
+from django.contrib.auth import views as auth_views
 
 
 api_path = 'api/'
@@ -27,7 +28,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("",index,name='index'),
     path("", include('geoland.urls')),
-    path(api_path+"geoland/test_shp",get)
-
+    path(api_path+"geoland/test_shp",get),
+    # render login page
+    path('accounts/login/', login, name='login'),
+    path('accounts/logout/', logout, name='logout'),
 ]
 

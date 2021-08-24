@@ -69,6 +69,8 @@ define([],function(){
             computed: {
             },
             methods: {
+                //************************* 共用部份 *******************//
+                //***********圖層控制*************/
                 removeLayer: function(){
                     var self = this;
                     this.taoyuanLayer.remove();
@@ -87,55 +89,56 @@ define([],function(){
                         styles: layerstyle,
                         version: '1.1.0',
                         attribution:'taoyuan land parcels',
+                        crs: L.CRS.EPSG4326,
                         zIndex: 1000
                     });
                     this.taoyuanLayer.addTo(map);           
                     //加入圖例
                     var legend_url ='http://localhost:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + self.classifyattributes;
                     this.legend = L.wmsLegend(legend_url);
-                    this.legend.addTo(map);        
+                    this.legend.addTo(map); 
                 },
 
 
-                /**
-                 * 自行指定類別
-                 */
-                //拉桃園市地籍圖的API
-                getParcels: function () {
-                    var self = this;
-                    var promise = new Promise(function(resolve, reject){
-                        $('#loading')[0].style.display = 'flex'
-                        $.get(website_url+'api/geoland/hotspots', function(data, status){
-                            self.parcels.push(data)
-                            $('#loading')[0].style.display = 'none'
-                            resolve(self.parcels)
-                        });
-                    })
-                    return promise;
-                  },
-                
-                // 縮放指定分類的條件//
-                goToMapClass: function(){
-                    this.showMapClass = true;
-                },
-
-                // Draw Layer//
-                addParcelLayer: function(parcelFeature){
-                    var self = this;   
-                    var parcelFeature = this.parcels[0];            
-                    var layer = L.choropleth(parcelFeature,{
-                        valueProperty: self.classifycolumn, // which property in the features to use
-	                    scale: ['yellow', 'red'], // chroma.js scale - include as many as you like
-	                    steps: self.classnumbers, // number of breaks or steps in range
-	                    mode: self.classification, // q for quantile, e for equidistant, k for k-means
-	                    style: {
-		                    color: 'black', // border color
-		                    weight: 2,
-		                    fillOpacity: 0.8
-	                    },
-                    }).addTo(map);
-                    self.parcelLayer = layer
-                },
+                ///**
+                // * 自行指定類別
+                // */
+                ////拉桃園市地籍圖的API
+                //getParcels: function () {
+                //    var self = this;
+                //    var promise = new Promise(function(resolve, reject){
+                //        $('#loading')[0].style.display = 'flex'
+                //        $.get(website_url+'api/geoland/hotspots', function(data, status){
+                //            self.parcels.push(data)
+                //            $('#loading')[0].style.display = 'none'
+                //            resolve(self.parcels)
+                //        });
+                //    })
+                //    return promise;
+                //  },
+                //
+                //// 縮放指定分類的條件//
+                //goToMapClass: function(){
+                //    this.showMapClass = true;
+                //},
+//
+                //// Draw Layer//
+                //addParcelLayer: function(parcelFeature){
+                //    var self = this;   
+                //    var parcelFeature = this.parcels[0];            
+                //    var layer = L.choropleth(parcelFeature,{
+                //        valueProperty: self.classifycolumn, // which property in the features to use
+	            //        scale: ['yellow', 'red'], // chroma.js scale - include as many as you like
+	            //        steps: self.classnumbers, // number of breaks or steps in range
+	            //        mode: self.classification, // q for quantile, e for equidistant, k for k-means
+	            //        style: {
+		        //            color: 'black', // border color
+		        //            weight: 2,
+		        //            fillOpacity: 0.8
+	            //        },
+                //    }).addTo(map);
+                //    self.parcelLayer = layer
+                //},
 
                 initDraggable:function(){
                     $(".panel-info-container").draggable();

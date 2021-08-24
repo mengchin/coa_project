@@ -1,0 +1,83 @@
+<div id="spatialComponentContainer" class="h-100 w-100 p-1">
+    <!---div class="form-check">
+            <input class="form-check-input" type="checkbox" v-on:click="checkClusterLayer">
+            <label class="form-check-label" v-html="$t('spatialanalysis.showClusterData')"></label>
+    </div --->
+    
+    <div class="test-select mb-2">
+        <!--空間分析-->        
+        <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle3')"></h5>
+        <p style="padding-left:10px;">
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click = "getSpatialData"></button>&nbsp;
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearSpatial')" v-on:click = "clearSpatialData"></button>
+            <p style="padding-left:10px; line-height: 24px;">
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showSpatialLayer')" v-on:click = "addSpatialLayer"></button> 
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeSpatialLayer')" v-on:click = "removeSpatialLayer"></button>
+            </p>
+        </p> 
+        <div id= globalResult style="padding-left:10px;"> 
+            {{ globalMethod }} {{ globalData[0] }} <br>            
+        </div>     
+        <hr>
+        <!--聚集區計算-->
+        <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.clusterTitle')"></h5>
+        <p style="padding-left:10px;">
+            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.mergeSpatialParcels')" v-on:click = "getClusterData"></button><br>
+            <p style="padding-left:10px; line-height: 24px;">
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showClusterLayer')" v-on:click = "addClusterLayer"></button> &nbsp;
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeClusterLayer')" v-on:click = "removeClusterLayer"></button>
+            </p>
+            <p style="padding-left:10px;">
+                <button class="btn btn-info btn-sm" v-html="$t('spatialanalysis.Intro')" v-on:click = "showIntro"></button>
+            </p>  
+        </p>
+        
+    </div>     
+       
+    <div class="morans-container" v-show="MoransPlot">
+            <div class="morans-container-header">
+                <div v-on:click="closeMoransPlot"><i class="fa fa-times" aria-hidden="true"></i></div>
+            </div>
+            <h5 v-html="$t('spatialanalysis.MoranPlot')"></h5> 
+            <div v-html='Moran' style="padding-left: 10px; padding-bottom: 10px;"></div>
+    </div>        
+    
+    <!--空間分析結果圖例-->                                                                                                                                                                                                                                           
+    <!---div class="legend d-flex flex-column">
+        <div>Area-weighted HHI</div>
+        <div v-for="(item,index) in legendColor"><i classs="icon" :style="{ backgroundColor: item.color}"></i><span>{{ item.name }}</span></div>
+    </div--->
+
+    <!--產權聚集區圖例-->                                                                                                                                                                                                                                           
+    <!---div class="legend d-flex flex-column">
+        <div>Area-weighted HHI</div>
+        <div v-for="(item,index) in legendColor"><i classs="icon" :style="{ backgroundColor: item.color}"></i><span>{{ item.name }}</span></div>
+    </div--->
+
+    <div class="intro-container" v-show="InfoWindow">
+        <div class="intro-container-header">
+            <div v-on:click="closeIntro"><i class="fa fa-times" aria-hidden="true"></i></div>
+        </div>
+        <h5>空間分析功能敘述</h5>    
+            <p>本功能融合兩階段步驟,主要以空間分析方法找出產權複雜的農地在空間分佈上是否有聚集特徵，並針對這些聚集區分析內部的農地特徵。</p>
+        <b>空間分析</b>                                                                                                                                           
+            <p> 利用Getis Ord G*方法計算產權複雜度衡量指標在空間上群聚的位置。
+                計算成果在圖面上標示為藍色的即為HHI值低聚集的農地，其產權複雜度較高，共同所有人數較多。
+                紅色的則為高HHI值聚集的地方，即為產權單純農地聚集處。然而，因資料有70%為單獨所有農地，故空間上產權單純農地呈現的特徵相較產權複雜農地特徵來說較不顯著。  
+            </p>
+        <b>合併產權複雜聚集區</b>
+        <h6>合併計算產權複雜聚集區內屬性</h6> 
+            <p>
+                將邊相連且具有顯著的產權複雜群聚特徵（藍色）的農地合併，並篩選區域內農地筆數大於5筆的地方。這些區域則稱為『產權複雜農地聚集區』。
+            </p>
+        <h6>計算產權複雜聚集區內屬性</h6> 
+            <p>
+                <ul>
+                    <li>面積加權平均(aw_HHI): 聚集區內利用個別農地面積做為權重，計算出該聚集區的面積加權平均HHI。</li>
+                    <li>面積標準差(area_std): 聚集區內所有農地面積的標準差。</li>
+                    <li>面積標準差(area_sum): 聚集區內所有農地面積的總和，即該聚集區的面積。</li>
+                </ul>
+            </p>        
+    </div>
+
+</div>                                                                          

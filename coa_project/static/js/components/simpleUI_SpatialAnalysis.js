@@ -1,10 +1,10 @@
-define([],function(){    
+define([],function(){
     //載入html
-    var spatialComponentHtml = "";
+    var simpleSpatialComponentHtml = "";
     var website_url = "http://127.0.0.1:8000/"
     var loadHtml = function(){
         $.ajax({
-            url: 'static/componentTemplates/spatialAnalysis/spatialComponent.html',
+            url: 'static/componentTemplates/spatialAnalysis/simpleSpatialComponent.html',
             type: 'GET',
             async: false,
             data: {
@@ -16,23 +16,22 @@ define([],function(){
             },
             success: function (xml) {
 
-                spatialComponentHtml = xml;
+                simpleSpatialComponentHtml = xml;
             }
         });
     }
     loadHtml()
 
     window.SpatialMap = (function(){
-        const spatialComponent = {
-            name: 'spatial',
+        const simpleSpatialComponent = {
+            name: 'simplespatial',
             mixins: [],
             components: {
 
             },
-            template: spatialComponentHtml,
+            template: simpleSpatialComponentHtml,
             data: function () {
                return {
-                showoutput: false,
                 isCheck:false, //勾選是否加入圖層
                 legendColor:[
                         {color:'#e31a1c',name:"0.7 - 1.0"},
@@ -134,7 +133,7 @@ define([],function(){
             },
 
             addClusterLayer: function(){   
-                var self = this;
+                var self = this;        
                     if(self.$store.state.ClusterArea.length > 0 && self.ClusterIsDisable == false) {         
                         var clusterFeature = this.$store.state.ClusterArea[0];                     
                         this.$store.state.ClusterLayer = L.geoJSON(clusterFeature,{
@@ -162,9 +161,7 @@ define([],function(){
                 getGlobalData: function(){
                     var self = this;
                     // Get data //
-                    if (self.globalMethod == "") {
-                        alert(i18n.t("spatialanalysis.methodAlert"));                        
-                    } else if (self.globalMethod == "Moran's I Value:"){
+                    if (self.globalMethod == "Moran's I Value:"){
                         data_api = 'api/geoland/morans'
                         var promise = new Promise(function(resolve, reject){
                             $('#loading')[0].style.display = 'flex'
@@ -196,9 +193,7 @@ define([],function(){
                 getSpatialData: function(){
                     var self = this;
                     // Get data //
-                    if (self.spatialMethod == "") {
-                        alert(i18n.t("spatialanalysis.methodAlert"));                        
-                    } else if (self.spatialMethod == "Gstar"){
+                    if (self.spatialMethod == "Gstar"){
                         data_api = 'api/geoland/Gstar'
                         var promise = new Promise(function(resolve, reject){
                             $('#loading')[0].style.display = 'flex'
@@ -343,11 +338,8 @@ define([],function(){
 		        initDraggable:function(){
                    $(".panel-info-container").draggable();
 
-                },
-                //async print () {
-                //    // Pass the element id here
-                //    await this.$htmlToPaper('printMe');
-                //}  
+                }
+
             },
 
             mounted: function () {
@@ -355,10 +347,9 @@ define([],function(){
             }
         };
         return {
-            spatialComponent: spatialComponent
+            simpleSpatialComponent: simpleSpatialComponent
         }
     }())
     // Window name//
     return SpatialMap
 });
-

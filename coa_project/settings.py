@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-v_=0n+pm^!urr3@$$t!@2alimr@q=3sit2nozdv0th+zr7b%tr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.107',
-                 '127.0.0.1', 
+ALLOWED_HOSTS = ['127.0.0.1', 
                  'localhost']
 
 
@@ -193,6 +192,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'coa_project/static')]
 
+# Config leaflet settings
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (25, 121.2),
     'DEFAULT_ZOOM': 12,

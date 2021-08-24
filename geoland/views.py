@@ -1,10 +1,16 @@
+#----- Login Pages----
+from django.contrib import auth
 #-----Basic imports for rendering data-----
 import os
 import requests
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.core.serializers import serialize
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import get_template
+from django.urls import reverse
 from django.contrib.gis.geos import GEOSGeometry
 from .models import Taoyuan
 
@@ -21,10 +27,31 @@ from esda.geary import Geary
 from splot.esda import moran_scatterplot, plot_moran, lisa_cluster
 from libpysal.weights import lat2W,  Rook, KNN, attach_islands
 
+
+#====================== Login Page Renderer ========================
+def login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse(index))
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(username=username, password=password)
+    if user is not None and user.is_active:
+        auth.login(request, user)
+        return HttpResponseRedirect(reverse(index))
+    else:
+        return render(request, 'login.html', locals())
+        
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse(index))
+
+#====================== Main Page Renderer ========================= 
 # Create your views here.
+@login_required
 def index(request):
     return render(request, 'index.html')
 
+#=================== Convert models into Geaojscon API =====================
 # Serialize the object and published as an geojson api
 def taoyuan(request):
     taoyuan_parcel = serialize('geojson', Taoyuan.objects.all(),
@@ -32,13 +59,11 @@ def taoyuan(request):
                        fields = ('fll_ln_field','adj_hhi', 'land_ar'))
     return HttpResponse(taoyuan_parcel, content_type ='json')
 
-
 #================================== Spatial Analysis View -================================
 #----- Global Variables---------
 # Read Shapefile from folder
 shp_path = 'geoland/data/zhongli_hhi.shp'
 gdf = gpd.read_file(shp_path)
-
 # Define weights and neighbors
 def def_weight(gdf):
     w_knn = KNN.from_dataframe(gdf, k=1)
@@ -84,19 +109,6 @@ def cal_G_star(gdf):
     local_g = G_Local(hhi, w, permutations = 9999)
     return local_g
 
-# Local Geary
-#def cal_Geary_Local(gdf):
-#    hhi = gdf['adj_HHI']
-#    w = def_weight(gdf)
-#    geary_local = Geary_Local(hhi, w, permutations = 9999)
-#    return geary_local
-
-#-----Render to webpage-------
-#def moran_view(request):
-#    moran_I = cal_morans(gdf)
-#    morans = {"morans": moran_I.I}
-#    return render(request, 'UI_spatialComponent.html', morans)
-
 def moran_view(request):
     moran_I = cal_morans(gdf)
     return  HttpResponse(round(moran_I.I,4), content_type="text/plain")
@@ -111,6 +123,15 @@ def moran_scatter_view(request, *args, **kwargs):
 def geary_view(request):
     geary = cal_geary(gdf)
     return  HttpResponse(round(geary.C,4), content_type="text/plain")
+
+@csrf_exempt
+def selectCounty(request):
+    if request.method == 'GET':
+        countyname = request.GET('countyname')
+        shp_path = 'geoland/data/'+ countyname+'_hhi.shp'
+        gdf = gpd.read_file(shp_path)
+        data = gdf.to_json()
+    return HttpResponse(data, content_type='json')
 
 
 #-----Render GeoJSON---------

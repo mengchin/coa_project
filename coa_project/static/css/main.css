@@ -57,6 +57,7 @@ html,body{
     font-size: 26px;
     font-style: oblique;
 }
+
 .btn-lang {
     background: #3C4E54;
     font-size: 16px;
@@ -85,9 +86,32 @@ html,body{
 #map-coordinate .info:first-child{
     width: 185px;
 }
+
+.toggle-btn {
+    position: absolute;
+    top:  150px;
+    left: 160px;
+    padding: 40px 10px;
+    background-color: orange;
+    border-radius: 0 6px 6px 0;  
+    border-color: orange;
+}
+
+#form-container {
+    position: absolute;
+    left:20%;
+    top:10%;
+    z-index: 99999999;
+    padding: 10px 10px 10px 10px;
+    width:72%;
+    background-color: white;
+
+}
+
 .panel{
     height: 100%;
     position: absolute;
+    z-index: 1;
     background-color: #fff;
     width: 160px;
     position: absolute;
@@ -95,6 +119,8 @@ html,body{
     padding: 1%;
     background-color:#3C4E54;
     color:#fff;
+    //border-right: 10px solid orange;
+    padding: 20px;
 }
 .panel-function{
     border: 1px solid;
@@ -117,8 +143,8 @@ html,body{
 }
 .panel-info-container{
     cursor: move;
-   
 }
+
 .info-container-header{
     background-color: #5b5e6b;
     height: 35px;
@@ -137,4 +163,67 @@ html,body{
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+
+.print-container {
+    position: absolute;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    overflow: auto;
+    background-color: #FFF;
+    font-size: 14px;
+    z-index: 10000;
+}
+.print-container-header{
+    background-color: #dbdce0d8;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    align-items: center;
+    border-radius: 0 5px;
+    border-top-left-radius:5px;
+    border-top-right-radius: 5px;
+}
+
+.print-config {
+    padding-right:10px;
+    padding-left: 10px;
+    background-color: #FFF;   
+    float: left; 
+}
+
+.print-config-block {
+    border: 1px solid grey;
+    border-radius: 2px 2px 2px 2px;
+    padding-left: 5px;
+    margin: 10px 0;
+}
+
+.print-config-title {
+    border-bottom: 2px solid gray;
+    font-weight: bold;
+    color: grey;
+    padding-left: 10px;
+}
+.print-text-btn {
+    width: 25px;
+    height: 25px;
+    border: 1.5px solid grey;    
+    color:grey;
+    font-size: 12px;    
+    font-weight: bold;
+}
+
+.print-text-btn:active {
+    background-color: grey;
+    border-color: white;
+    color:white;
+}
+
+img#screenshot {
+
+	border: 1px solid red;
 }

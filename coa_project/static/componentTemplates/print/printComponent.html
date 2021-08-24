@@ -1,0 +1,39 @@
+<!--列印頁面-->
+<div id= "print-container" class= "print-container">
+    <div class="print-config">
+        <div class="print-config-info">
+            <strong>列印設定操作說明</strong>
+        </div>
+        <div class="print-config-block">
+            <div class="print-config-title">地圖標題</div>
+            <button class="print-text-btn">B</button>
+            <button class="print-text-btn">I</button>
+            <button class="print-text-btn">U</button>
+            <input type="text" placeholder="請輸入地圖標題">                
+        </div>
+        <div class="print-config-block">
+            <div class="print-config-title">地圖敘述</div>
+            <button class="print-text-btn">B</button>
+            <button class="print-text-btn">I</button>
+            <button class="print-text-btn">U</button>
+            <input type="text" placeholder="請輸入地圖敘述">                
+        </div>
+        <div class="print-config-block">
+            <div class="print-config-title">地圖內容</div>
+            <button class="print-text-btn">B</button>
+            <button class="print-text-btn">I</button>
+            <button class="print-text-btn">U</button>
+            <input type="text" placeholder="請輸入地圖內容">                
+        </div>
+        <div class="print-config-block">
+            <div class="print-config-title">輸出尺寸</div>
+            DPI: <input type="number">
+            <select type="radio">一般尺寸</select>
+        </div>
+        <button class="btn btn-secondary btn-sm">輸出成PDF</button>
+        <button class="btn btn-secondary btn-sm" v-on:click="PrintMap">輸出成PNG</button>
+    </div>
+    <div id='snapshot'></div>
+</div>
+
+

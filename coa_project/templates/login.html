@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>登入</title>
+        <link rel="stylesheet" href="/static/css/form.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="top">
+                <h1 id="title"><span id="logo">COA WEBSITE</span></h1>
+            </div>
+            <div class="login-box">
+                <div class="box-header">
+                    <h2>Log In</h2>
+                </div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <label for="username">Username</label>
+                    <input type="text" name="username" value="" id="username"> <br/>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" value="" id="password"> <br/>
+                    <button type="submit">Sign In</button>
+                </form>
+            </div>
+        </div>
+    <body>
+    
+</html>

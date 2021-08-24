@@ -1,0 +1,14 @@
+<div id="baseMapComponentContainer" class="h-100 w-100 p-1"> 
+    <div class="form-check">         
+        <p style="padding-left: 10px;">
+            <input class="form-check-input" type="checkbox" v-model="parcelChecked"> 
+            <label class="form-check-label" v-html="$t('simpleBasemap.parcelName')"></label>
+        </p>  
+        <p style="padding-left: 10px;">
+            <input class="form-check-input" type="checkbox" v-model="hhiChecked"> 
+            <label class="form-check-label" v-html="$t('simpleBasemap.HHIName')"></label>          
+        </p>
+        <label v-html="$t('simpleBasemap.opacity')"></label>          
+        <input type="range" min="0" max="100" value="50" step="10"class="slider" id="HHIOpacity" v-model= "opacity">
+    </div> 
+</div>

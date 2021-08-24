@@ -1,5 +1,6 @@
 const common_api_url = "http://127.0.0.1:8000/api/geoland/";
 const UI_Control = {}
+
 /****
  *  Vuex 處理
  */
@@ -9,11 +10,11 @@ const store = new Vuex.Store({
       orginalTaoyuanData :[],
       ClusterArea: [],
       ClusterLayer: undefined,
-
     },
     mutations: {
     }
   })
+
 /*******
  *  共用方法
  *******/ 
@@ -25,20 +26,20 @@ var calculationMixins = {
         };
     },
     methods: {
-      getTestMixins: function () {
-        var self = this;
-        var promise = new Promise(function(resolve, reject){
-            $('#loading')[0].style.display = 'flex'
-            $.get(common_api_url+'test_shp', function(data, status){
-                self.testData = data.shapes
-                self.testData.forEach(function(item){
-                    item.hhi = parseFloat(item.hhi)
-                })
-                resolve(self.testData)
-            });
-        })
-        return promise;
-      }
+        getTestMixins: function () {
+          var self = this;
+          var promise = new Promise(function(resolve, reject){
+              $('#loading')[0].style.display = 'flex'
+              $.get(common_api_url+'test_shp', function(data, status){
+                  self.testData = data.shapes
+                  self.testData.forEach(function(item){
+                      item.hhi = parseFloat(item.hhi)
+                  })
+                  resolve(self.testData)
+              });
+          })
+          return promise;
+        },
     }
   }
 
@@ -48,11 +49,18 @@ var calculationMixins = {
 const messages = {
     en: {
       title: {
+        version:'Version',
         websitename: 'COA Land Fragmentation Evaluation System Test',
         basemapComponentName: 'BaseMap',
         calculationComponentName: 'HHI Calculation',
         spatialComponentName: 'Spatial Anaylsis',
         rankComponentName: 'Rank Fragmented Areas',
+        printComponentName:'Export Map'
+      },
+      simpleBasemap:{
+          parcelName: "Taoyuan Land Parcels",
+          HHIName: "Taoyuan HHI",
+          opacity:"Opacity"
       },
       basemap:{
         basemapName: 'Taoyuan Land Parcels',
@@ -78,9 +86,12 @@ const messages = {
         removeAlert: 'Please remove the existing layer.',
         spatialTitle1: 'Spatial Analysis: Global',
         spatialTitle2: 'Spatial Analysis: Local',
+        spatialTitle3: 'Spatial Analysis',
         defineMethod: 'Choose Spatial Analysis Approach',
         executeGlobal: 'Start Analysis',
-        executeMethod: 'Start Spatial Analysis',
+        clearGlobal: 'Clear',
+        executeMethod: 'Start Analysis',
+        clearSpatial: 'Clear Analysis Result',
         removeSpatialLayer: 'Remove Layer',
         showSpatialLayer: 'Display Layer',
         clusterTitle: 'Calculate Attributes',
@@ -88,7 +99,8 @@ const messages = {
         showClusterLayer: 'Display Layer',
         removeClusterLayer: 'Remove Layer',
         showMoranPlot: "Display Moran's Scatter Plot",
-        MoranPlot: "Moran's I Test: HHI"
+        MoranPlot: "Moran's I Test: HHI",
+        Intro:"Help"
       },
       rankareas: {
         ranktitle: 'Rank Areas by Defined Conditions',
@@ -106,18 +118,24 @@ const messages = {
         clearrank:'Clear Conditions',
         startrank:'Start Evaluation',
         ranklist: 'Rank List'
-
-      }     
-      
+      }
     },
+
     tw: {
       title: {
+        version:'選擇版本',
         websitename: '行政院農業委員會地理資訊測試系統',
         basemapComponentName: '套疊圖層',
         calculationComponentName: '係數計算',
         spatialComponentName: '空間分析',
         rankComponentName: '條件排序',
+        printComponentName:'列印設定'
       },
+      simpleBasemap:{
+        parcelName: "桃園市全區地籍圖",
+        HHIName: "桃園市HHI分佈圖",
+        opacity:"透明度"
+    },
       basemap:{
         basemapName: '桃園市地籍圖',
         classAttributes: '分類欄位',
@@ -141,17 +159,21 @@ const messages = {
         removeAlert: '請先清除原有圖層',
         spatialTitle1: '產權複雜度空間分析：全域',
         spatialTitle2: '產權複雜度空間分析：區域',
+        spatialTitle3: '產權複雜度空間分析',
         defineMethod: '選擇空間分析方法',
         executeGlobal: '開始分析',
+        clearGlobal: '重新計算',
         executeMethod: '執行空間分析',
-        removeSpatialLayer: '清除空間分析結果',
-        showSpatialLayer: '顯示空間分析結果', 
+        clearSpatial: '清除分析結果',
+        removeSpatialLayer: '清除圖層',
+        showSpatialLayer: '顯示圖層', 
         clusterTitle: '產權複雜農地聚集區屬性計算',
-        mergeSpatialParcels: '合併計算集中區內屬性',
-        showClusterLayer: '繪製產權複雜集中區',
-        removeClusterLayer: '清除集中區圖層',
+        mergeSpatialParcels: '合併計算聚集區內屬性',
+        showClusterLayer: '繪製產權複雜聚集區',
+        removeClusterLayer: '清除聚集區圖層',
         showMoranPlot: "顯示Moran's I 散佈圖",
-        MoranPlot: "產權複雜度HHI Moran's I 檢定結果"
+        MoranPlot: "產權複雜度HHI Moran's I 檢定結果",
+        Intro:"幫助"
       },
       rankareas:{
         ranktitle: '設定條件排序產權複雜聚集區',
@@ -169,7 +191,7 @@ const messages = {
         clearrank:'清除並重新排序',
         startrank:'開始排序',
         ranklist: '排序列表'
-      }     
+      }    
     }
 }
 
@@ -191,20 +213,43 @@ const app = new Vue({
         return {
             currentComponentName:"",
             toShowPanelInfoContainer:false,
+            showEnterWindow: false,
+            showExpertVersion:false,
+            showSimpleVersion:false,
+            showSidePanel: false,
+            showPrint:false,
+            versionCheck:''
         };
     },
     watch:{
     },
     methods: {
-        shrinkPanel:function(){},
+        shrinkPanel: function() {
+
+        },
+        //PrintMap: function() {                
+        //    let myMapHTML= document.getElementById("map");
+        //    let mywindow = window.open("", "PrintTheMap","width=600,height=800");                                                                                                                                                                                                                                                                                                                                      
+        //    let header = '<html><head><link rel="stylesheet" href="/static/css/main.css" media="print"/> <link rel="stylesheet" href="/static/css/spatial.css"/> <link rel="stylesheet" href="/static/css/rank.css"/> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" /></head>'
+        //    //Adding the header to the window
+        //    mywindow.document.write(header);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        //    //Adding the map into the body
+        //    mywindow.document.write("<body>"+myMapHTML+"<body>");
+        //    mywindow.document.close(); // necessary for IE >= 10
+        //    mywindow.focus(); // necessary for IE >= 10
+        //    mywindow.print();
+        //    mywindow.close();
+        // 
+        // },
+
         btnZoomHandler: function (isZoomIn) {
             if (isZoomIn) {
                 map.zoomIn();
             } else {
-                map.zoomOut();
-                
+                map.zoomOut();                
             }
         },
+        
         /**
          * 初始基本套疊圖層
          */
@@ -224,8 +269,7 @@ const app = new Vue({
                 })
             }
             mapLayers['臺灣通用電子地圖(新)'].addTo(map); // 使用中文地圖作為預設
-            L.control.layers(mapLayers).addTo(map); // 加入地圖切換控制項
-
+            L.control.layers(mapLayers).addTo(map); // 加入地圖切換控制項     
         },
         /**
          * 初始化 zoom-in zoom-out
@@ -252,12 +296,33 @@ const app = new Vue({
                  position:'topright'
             }).addTo(map);
         },
+        //切換視窗功能
+        enterCheckWindow: function(){
+            this.showEnterWindow = true;
+        },
         changeCurrentComponentName:function(componentName){
             this.toShowPanelInfoContainer = true;
             this.currentComponentName = componentName
         },
         closePanel:function(){
             this.toShowPanelInfoContainer = false;
+            this.currentComponentName = ""
+        },
+        changeToExpertVersion:function() {
+            this.showEnterWindow = false;
+            this.showExpertVersion = true;
+            this.showSimpleVersion= false;
+        },
+        changeToSimpleVersion:function() {
+            this.showSimpleVersion= true;
+            this.showExpertVersion = false;
+        },
+        showPrintConfigure: function(componentName){
+            this.showPrint = true;     
+            this.currentComponentName = componentName       
+        },
+        closePrintConfigure: function(){
+            this.showPrint = false;
             this.currentComponentName = ""
         },
         getTaoyuanFromDB:function(){
@@ -271,7 +336,7 @@ const app = new Vue({
          /**
           * add layer
         */
-          addLayer:function(){
+        addLayer:function(){
             var taoyuanLayer = L.tileLayer.wms("http://localhost:8080/geoserver/taoyuan/wms", {
                 layers: 'taoyuan:Gentaoyuan',
                 format: 'image/png',
@@ -281,18 +346,17 @@ const app = new Vue({
             });
             taoyuanLayer.setOpacity(1)
             taoyuanLayer.addTo(map);
-
         },
-    
+                
         changeLanguage(lang) {
             this.$i18n.locale = lang;
           },
+        },
 
-    },
     beforeCreate:function (){
         var vm = this;
         if (Object.keys(vm.$options.components).length < 1) {
-            require(['static/js/components/UI_BaseMap','static/js/components/UI_Calculation', 'static/js/components/UI_SpatialAnalysis', 'static/js/components/UI_RankConditions'], function (UI_BaseMapComponents,UI_CalculationComponents, UI_SpatialComponents, UI_RankComponents) {
+            require(['static/js/components/UI_BaseMap','static/js/components/UI_Calculation', 'static/js/components/UI_SpatialAnalysis', 'static/js/components/UI_RankConditions','static/js/components/simpleUI_SpatialAnalysis', 'static/js/components/simpleUI_BaseMap', 'static/js/components/UI_PrintMap'], function (UI_BaseMapComponents,UI_CalculationComponents, UI_SpatialComponents, UI_RankComponents, simpleUI_spatialComponents, simpleUI_BaseMapComponents, UI_PrintMapComponents) {
               
                 for (var key in UI_BaseMapComponents) {
                     vm.$options.components[key] = UI_BaseMapComponents[key];
@@ -306,12 +370,20 @@ const app = new Vue({
                 for (var key in UI_RankComponents) {
                     vm.$options.components[key] = UI_RankComponents[key];
                 }
+                for (var key in simpleUI_spatialComponents) {
+                    vm.$options.components[key] = simpleUI_spatialComponents[key];
+                }
+                for (var key in simpleUI_BaseMapComponents) {
+                    vm.$options.components[key] = simpleUI_BaseMapComponents[key];
+                } 
+                for (var key in UI_PrintMapComponents) {
+                    vm.$options.components[key] = UI_PrintMapComponents[key];
+                }                    
             });
         }
     },
     created:function(){
-        var self = this;
-        
+        var self = this;        
     },
     mounted: function () {
         var self = this;
@@ -326,7 +398,7 @@ const app = new Vue({
    
         
 });
-window.app = app  
+window.app = app;
 
 
 

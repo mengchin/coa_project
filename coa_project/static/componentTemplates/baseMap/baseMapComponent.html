@@ -23,15 +23,8 @@
                 <option value="jenks">Natural Breaks</option>
             </select> 
             <br>
-            <label class="form-check-label" v-html="$t('basemap.opacity')"></label>
-            <select name="" id="layerOpacity" v-model="opacity">
-                <option value="100">100%</option>
-                <option value="80">80%</option>
-                <option value="60">60%</option>
-                <option value="40">40%</option>
-                <option value="20">20%</option>
-                <option value="0">0%</option>
-            </select>
+            <label v-html="$t('simpleBasemap.opacity')"></label>          
+        <input type="range" min="0" max="100" value="50" step="10"class="slider" id="HHIOpacity" v-model= "opacity">
         </p>  
 
     </div>
