@@ -23,8 +23,7 @@ define([],function(){
     loadHtml()
 
     window.Rank = (function(){
-        var self = this;
-        //const DATA = 'http://127.0.0.1:8000/geoland/hotspots'
+        var self = this;      
         const rankComponent = {
             name: 'rank',
             mixins: [],

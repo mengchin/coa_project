@@ -1,0 +1,21 @@
+.chart-container-header {
+    background-color: #5b5e6b;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    align-items: center;
+    border-radius: 0 5px;
+    border-top-left-radius:5px;
+    border-top-right-radius: 5px;
+}
+
+.chart-container {
+    position: fixed;
+    left: 60vh;
+    height: auto;
+    width: 600px;
+    top:10vh;
+    background-color:#696D7D;
+    border-radius: 5px;
+  }

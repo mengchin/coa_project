@@ -1,5 +1,5 @@
 from shapely.geometry import Point, mapping, shape
-from .models import test_shp, Taoyuan
+from .models import Taoyuan
 from django.views.decorators.csrf import csrf_exempt
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse, HttpResponse

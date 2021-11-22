@@ -1,14 +1,312 @@
 <div id="baseMapComponentContainer" class="h-100 w-100 p-1"> 
-    <div class="form-check">         
-        <p style="padding-left: 10px;">
-            <input class="form-check-input" type="checkbox" v-model="parcelChecked"> 
-            <label class="form-check-label" v-html="$t('simpleBasemap.parcelName')"></label>
-        </p>  
-        <p style="padding-left: 10px;">
-            <input class="form-check-input" type="checkbox" v-model="hhiChecked"> 
-            <label class="form-check-label" v-html="$t('simpleBasemap.HHIName')"></label>          
-        </p>
-        <label v-html="$t('simpleBasemap.opacity')"></label>          
-        <input type="range" min="0" max="100" value="50" step="10"class="slider" id="HHIOpacity" v-model= "opacity">
-    </div> 
+    <!---NavBar-->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="layer-tab" data-bs-toggle="tab" data-bs-target="#layerstacks" type="button" role="tab" aria-controls="layerstacks" aria-selected="true" v-html="$t('simpleBasemap.navbar_layer')"></button>
+        </li>
+        <li class="nav-item" role=""presentation>
+            <button class="nav-link" id="raw-filter-tab" data-bs-toggle="tab" data-bs-target="#rawfilter" type="button" role="tab" aria-controls="rawfilter" aria-selected="false" v-html="$t('simpleBasemap.navbar_rawfilter')"></button>         
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="decision-tab" data-bs-toggle="tab" data-bs-target="#decision" type="button" role="tab" aria-controls="decision" aria-selected="false" v-html="$t('simpleBasemap.navbar_decision')"></button>
+        </li>
+    </ul>
+    <!---Tab Content-->
+    <div class="tab-content" id="nav-tabContent" style="background-color: #546469; padding-top: 10px; padding-bottom: 10px; border-radius: 5px;">
+        <!---Layers-->
+        <div class="tab-pane fade show active" id="layerstacks" role="tabpanel" aria-labelledby="layer-tab">
+            <div class="form-check">    
+                <div id="layer-attributes">
+                    <h5 v-html="$t('simpleBasemap.attributes')"></h5>
+                    <div>
+                        <span v-html="$t('simpleBasemap.selectCounty')"></span>
+                        <select name="" id="classifyattributes" v-model="county">
+                            <option v-html="$t('simpleBasemap.county.taoyuan')" value="taoyuan"></option>
+                            <option v-html="$t('simpleBasemap.county.chiayi')" value="chiayi"></option>
+                        </select> 
+                    </div>            
+                    <div style="padding-left:20px; padding-right: 20px; ">  
+                        <label v-html="$t('simpleBasemap.parcelName')"></label>   
+                            <input class="form-check-input" type="checkbox" v-model="parcelChecked">                                                                                                                              
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="parcelOpacity" v-model= "parcelOpacity">                  
+                            <br>
+                        <label value="area" v-html="$t('simpleBasemap.area')"></label>
+                            <input class="form-check-input" type="checkbox" v-model="areaChecked">
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="areaOpacity" v-model= "areaOpacity">            
+                            <br>    
+                        <label value="owner"v-html="$t('simpleBasemap.owner')"></label>  
+                            <input class="form-check-input" type="checkbox" v-model="ownerChecked"> 
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="ownerOpacity" v-model= "ownerOpacity"> 
+                            <br>    
+                        <label value="hhi"v-html="$t('simpleBasemap.hhi')"></label>  
+                            <input class="form-check-input" type="checkbox" v-model="hhiChecked">   
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="hhiOpacity" v-model= "hhiOpacity">        
+                    </div>
+                </div> 
+                <hr>
+                <div id= 'layer-boundaries'>  
+                    <h5 v-html="$t('simpleBasemap.geoboundaries')"></h5>
+                    <div style="padding-left:10px; padding-right: 20px; ">         
+                        <label v-html="$t('simpleBasemap.townshipName')"></label>   
+                            <input class="form-check-input" type="checkbox" v-model="townshipChecked">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="townOpacity" v-model= "townOpacity">                                                                                                                                                                                                                                                                    
+                        <br>
+                        <label v-html="$t('simpleBasemap.villageName')"></label>  
+                            <input class="form-check-input" type="checkbox" v-model="villageChecked">               
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="villageOpacity" v-model= "villageOpacity">  
+                        <br>
+                        <label v-html="$t('simpleBasemap.sectionName')"></label>   
+                            <input class="form-check-input" type="checkbox" v-model="sectionChecked">                                                                                                                              
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="sectionOpacity" v-model= "sectionOpacity">                                                                                                                             
+                    </div>  
+                </div>                                                                          
+                <hr>
+                <div id='layer-others'>
+                    <h5 v-html="$t('simpleBasemap.others')"></h5>
+                    <div style="padding-left:10px; padding-right: 20px; ">
+                        <label v-html="$t('simpleBasemap.transactionPrice')"></label>   
+                            <input class="form-check-input" type="checkbox" v-model="transactionChecked" >
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="transactionOpacity" v-model= "transactionOpacity">           
+                            <br>
+                        <label v-html="$t('simpleBasemap.orthoName')"></label>   
+                            <input class="form-check-input" type="checkbox" v-model="orthoChecked" >
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="orthoOpacity" v-model= "orthoOpacity">         
+                        <label v-html="$t('simpleBasemap.landuseName')"></label> 
+                            <input class="form-check-input" type="checkbox" v-model="landuseChecked" > 
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="landuseOpacity" v-model= "landuseOpacity">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                            <br>    
+                        <label v-html="$t('simpleBasemap.landsuitName')"></label> 
+                            <input class="form-check-input" type="checkbox" v-model="landsuitChecked"> 
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="landsuitOpacity" v-model= "landsuitOpacity">
+                            <br>
+                        <label v-html="$t('simpleBasemap.landproductName')"></label> 
+                            <input class="form-check-input" type="checkbox" v-model="landproductChecked"> 
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="landproductOpacity" v-model= "landproductOpacity">
+                            <br>    
+                        <label v-html="$t('simpleBasemap.bivariate')"></label> 
+                            <input class="form-check-input" type="checkbox" v-model="bivariateChecked"> 
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="bivariateOpacity" v-model= "bivariateOpacity">
+                    </div>  
+                </div>
+                <br>
+                <div id = "bookmarks" style="width:300px;height:150px;overflow:auto;">
+                    <div style="display:inline-flex">
+                        <input type="text" style="width: 50px;" v-model='inputBookMark'>
+                        <button class="btn btn-light btn-sm" v-html="$t('simpleBasemap.addBookMarks')" v-on:click="addBookMarks">Add bookmarks</button>
+                        &nbsp;&nbsp;
+                        <div v-if="bookmarks.length !=0">
+                            <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.clearBookMarks')" v-on:click="clearBookMarks"></button>
+                        </div>
+                    </div>
+                    <div id="bookmark-list" style="padding-top: 10px;"> 
+                      <!---p v-for="(item,index) in bookmarks">Location {{index+1}}                        
+                        <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.zoomTo')" v-on:click="zoomToBookMarks(index)">ZoomTo</button>
+                        <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.removeBookMarks')" v-on:click="removeBookMarks(index)">Remove</button>
+                      </p--->
+                      <p v-for="(item,index) in bookmarkName">{{index+1}}.{{item}}                       
+                        <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.zoomTo')" v-on:click="zoomToBookMarks(index)">ZoomTo</button>
+                        <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.removeBookMarks')" v-on:click="removeBookMarks(index)">Remove</button>
+                      </p>
+                    </div>
+                </div>                                 
+            </div>
+        </div>
+
+        <!---Decisions-->
+        <div class="tab-pane fade" id="decision" role="tabpanel" aria-labelledby="decision-tab">
+            <div class="form-check" style="padding-right: 15px;">
+                <div>
+                    <h6 v-html="$t('simpleBasemap.selectCounty')"></h6>
+                    <select name="" id="classifyattributes" v-model="county">
+                        <option v-html="$t('simpleBasemap.county.taoyuan')" value="taoyuan"></option>
+                        <option v-html="$t('simpleBasemap.county.chiayi')" value="chiayi"></option>
+                    </select> 
+                </div>
+                <br>
+                <div>
+                    <h6 v-html="$t('simpleBasemap.conditionSetting')"></h6>
+                    <div style="padding-left:10px; padding-right: 20px; ">  
+                        <label v-html="$t('simpleBasemap.parcelcnt')"></label>                        
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcelMax">  
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcelMin"> 
+                            <br>     
+                        <label v-html="$t('simpleBasemap.area_sum')"></label>                        
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "areaMax">           
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "areaMin"> 
+                            <br> 
+                        <label v-html="$t('simpleBasemap.area_std')"></label>                           
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "stdMax">   
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "stdMin">  
+                            <br> 
+                        <label v-html="$t('simpleBasemap.aw_hhi')"></label>                           
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "hhiMax">   
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "hhiMin">  
+                    </div>  
+                    <button v-html="$t('simpleBasemap.filterConditions')"class="btn btn-secondary btn-sm" v-on:click="addFilterLayer"></button>      
+                    <button v-html="$t('simpleBasemap.resetConditions')"class="btn btn-secondary btn-sm" v-on:click="removeFilterLayer"></button>      
+                    <br><br>
+                    <label v-html="$t('simpleBasemap.opacity')"></label>
+                    <input type="range" min="0" max="100" value="50" step="10"class="slider" id="villageOpacity" v-model= "filterOpacity">                                                                                                  
+                </div>
+            </div>
+            <hr>
+            <!---Policy NavBar-->
+            <div class="nav flex-column" style="padding-left:15px; padding-right: 15px; ">
+                <h5 v-html="$t('simpleBasemap.type')"></h5>   
+                <div clas="form-check" style="width:300px;height:380px;overflow:auto;">       
+                    <div class="btn-group-vertical">
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBuy" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type1.title')"></button>
+                            <div class="collapse" id="collapseBuy">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type1.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type1.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type1.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check1" autocomplete="off" v-model="HHLChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check1" style="width: 100px; background-color: cadetblue;">Display</label>      
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseConsolid" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type2.title')"></button>
+                            <div class="collapse" id="collapseConsolid">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type2.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type2.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type2.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check2" autocomplete="off" v-model="HHHChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check2" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTrans" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type3.title')"></button>
+                            <div class="collapse" id="collapseTrans">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type3.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type3.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type3.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check3" autocomplete="off" v-model="HLLChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check3" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>            
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExchange" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type4.title')"></button>        
+                            <div class="collapse" id="collapseExchange">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type4.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type4.condition2')"></li> 
+                                        <li v-html="$t('simpleBasemap.Type4.condition3')"></li> 
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check4" autocomplete="off" v-model="HLHChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check4" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCompensate" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type5.title')"></button>        
+                            <div class="collapse" id="collapseCompensate">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type5.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type5.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type5.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check5" autocomplete="off" v-model="LHLChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check5" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRent" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type6.title')"></button>        
+                            <div class="collapse" id="collapseRent">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type6.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type6.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type6.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check6" autocomplete="off" v-model="LLLChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check6" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTrust" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type7.title')"></button>        
+                            <div class="collapse" id="collapseTrust">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type7.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type7.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type7.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check7" autocomplete="off" v-model="LHHChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check7" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAgriRight" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type8.title')"></button>        
+                            <div class="collapse" id="collapseAgriRight">
+                                <div class="card card-body" style="width: 280px;color: rgb(75, 69, 69);">
+                                    <h6 v-html="$t('simpleBasemap.condition')"></h6> 
+                                    <ol>
+                                        <li v-html="$t('simpleBasemap.Type8.condition1')"></li>
+                                        <li v-html="$t('simpleBasemap.Type8.condition2')"></li>
+                                        <li v-html="$t('simpleBasemap.Type8.condition3')"></li>
+                                    </ol>
+                                    <input type="checkbox" class="btn-check" name="options" id="check8" autocomplete="off" v-model="LLHChecked">
+                                    <label class="btn btn-secondary btn-sm" for="check8" style="width: 100px; background-color: cadetblue;">Display</label>
+                                </div>
+                            </div>                          
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!---Raw Data Filter-->
+        <div class="tab-pane fade" id="rawfilter" role="tabpanel" aria-labelledby="raw-filter-tab">
+            <div class="form-check" style="padding-right: 15px;">
+                <div>
+                    <h6 v-html="$t('simpleBasemap.selectCounty')"></h6>
+                    <select name="" id="classifyattributes" v-model="county">
+                        <option v-html="$t('simpleBasemap.county.taoyuan')" value="taoyuan"></option>
+                        <option v-html="$t('simpleBasemap.county.chiayi')" value="chiayi"></option>
+                    </select> 
+                </div>
+                <br>
+                <div>
+                    <h6 v-html="$t('simpleBasemap.conditionSetting')"></h6>
+                    <div style="padding-left:10px; padding-right: 20px; ">  
+                        <label v-html="$t('simpleBasemap.owner_count')"></label>
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcel_ownerCount_Max">  
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcel_ownerCount_Min">  
+                            <br>          
+                        <label v-html="$t('simpleBasemap.land_area')"></label>  
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcel_areaMax">           
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcel_areaMin">      
+                        <br>
+                        <label v-html="$t('simpleBasemap.parcelhhi')"></label>  
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcel_hhiMax">           
+                            <input type="text" style="height:20px; width:40px; float: right;" v-model= "parcel_hhiMin">      
+                    </div>  
+                    <button v-html="$t('simpleBasemap.filterConditions')"class="btn btn-secondary btn-sm" v-on:click="addRawFilterLayer"></button>      
+                    <button v-html="$t('simpleBasemap.resetConditions')"class="btn btn-secondary btn-sm" v-on:click="removeRawFilterLayer"></button>      
+                    <br><br>
+                    <label v-html="$t('simpleBasemap.opacity')"></label>
+                    <input type="range" min="0" max="100" value="50" step="10"class="slider" id="villageOpacity" v-model= "rawfilterOpacity">
+                </div>                
+            </div>
+            <hr>
+            <div id="statistics" style="padding-left:10px; padding-right: 20px; ">
+                <h5 v-html="$t('simpleBasemap.statistics')"></h5>
+                <span v-html="$t('simpleBasemap.originCount')"></span>: {{ parcelData[0]?.totalFeatures}}                
+                <br>
+                <span v-html="$t('simpleBasemap.filteredCount')"></span>: {{ filterData[0]?.totalFeatures }} 
+                <br>
+                <span v-html="$t('simpleBasemap.filteredRatio')"></span>: {{ Math.round(filterData[0]?.numberMatched*10000/parcelData[0]?.numberMatched)/100 }} ％
+            </div>
+            <!---button v-on:click="computeStats">Test</button--->
+        </div>
+    </div>
 </div>

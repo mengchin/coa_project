@@ -49,11 +49,11 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
             layers: this.wmsParams.layers,
             query_layers: this.wmsParams.layers,
             info_format: 'text/html',
-            propertyName: 'fll_ln_,Count,adj_HHI,land_ar'
+            //propertyName: 'fll_ln_,Count,adj_HHI,land_ar'
           };
       
-      params[params.version === '1.3.0' ? 'i' : 'x'] = point.x;
-      params[params.version === '1.3.0' ? 'j' : 'y'] = point.y;
+      params[params.version === '1.3.0' ? 'i' : 'x'] = Math.round(point.x);
+      params[params.version === '1.3.0' ? 'j' : 'y'] = Math.round(point.y);
       
       return this._url + L.Util.getParamString(params, this._url, true);
     },
@@ -62,7 +62,7 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
       if (err) { console.log(err); return; } // do nothing if there's an error
       
       // Otherwise show the content in a popup, or something.
-      L.popup({ maxWidth: 800})
+      L.popup({ maxWidth: 300})
         .setLatLng(latlng)
         .setContent(content)
         .openOn(this._map);

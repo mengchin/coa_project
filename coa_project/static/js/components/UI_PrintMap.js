@@ -28,20 +28,31 @@ define([], function() {
             template: printComponentHtml,
             data: function () {
                 return { 
-                    print: undefined
-                     
+                    printform: {
+                        printTitle: '',
+                        printDescription:''
+                    },
+                    print: undefined,                     
                 }           
             },
             watch:  {
             },
-            computed: {
-            
+            props:{ 
+            },
+            computed: { 
+               
             }, 
             methods: {                
-                PrintMap: function(){   
-                }               
+                PrintMap: function(){                       
+                    window.print();  
+                },
+                initDraggable:function(){
+                    $(".panel-info-container").draggable();
+                },
+                              
             },
             mounted: function () {
+                this.initDraggable();
             }
         };
         return {

@@ -1,6 +1,7 @@
 const common_api_url = "http://127.0.0.1:8000/api/geoland/";
 const UI_Control = {}
 
+
 /****
  *  Vuex 處理
  */
@@ -12,6 +13,12 @@ const store = new Vuex.Store({
       ClusterLayer: undefined,
     },
     mutations: {
+        updatePrintTitle(state, payload) {
+            state.value = payload
+        },
+        updatePrintDescription(state, payload) {
+            state.value = payload
+        }
     }
   })
 
@@ -46,21 +53,109 @@ var calculationMixins = {
 /********************************
  * 設定要轉換語言的項目
  * *****************************/
-const messages = {
+ const messages = {
     en: {
+      version:{
+        basic:'Basic',
+        advanced:'Advanced'
+      },
       title: {
         version:'Version',
         websitename: 'COA Land Fragmentation Evaluation System Test',
         basemapComponentName: 'BaseMap',
         calculationComponentName: 'HHI Calculation',
         spatialComponentName: 'Spatial Anaylsis',
+        newcalculationComponentName:'Calculation ＆ Statistics',
         rankComponentName: 'Rank Fragmented Areas',
         printComponentName:'Export Map'
       },
       simpleBasemap:{
-          parcelName: "Taoyuan Land Parcels",
-          HHIName: "Taoyuan HHI",
-          opacity:"Opacity"
+        navbar_layer: "Layers",
+        navbar_decision:"Decision Supports",
+        navbar_rawfilter:"Filter Parcels",
+        geoboundaries:"Parcels and Boundaries",
+        attributes:"Parcel Attributes",
+        others: "Others",  
+        theme:"Decision Supports", 
+        statistics:'Statistics',
+        originCount:'Original Data',
+        filteredCount:'Filtered Data',
+        filteredRatio:'Proportion',
+        bivariate:'Bivariate Map Test',
+        parcelName: "Farmland Parcels",
+        townshipName:'Township Boundaries',
+        sectionName:'Land Sections',
+        villageName:"Village Boundaries",      
+        area: 'Area Size',
+        owner: 'Ownership Status',
+        hhi:'Land Fragmented Index HHI',
+        transactionPrice:"Land Transaction",
+        landuseName:'Land Use Investigation Maps',
+        waterRouteName:"Water Routes",
+        orthoName:"Ortho Image",
+        landsuitName:'Farmland Importance Level',
+        landproductName:'Farmland Productivity Level',
+        opacity:"Opacity",
+        cluster:"HHI Spatial Clusters",
+        selectCounty:"Select County",
+        county:{taoyuan:"Taoyuan",
+                chiayi: "Chiayi"
+        },
+        addBookMarks:'Add Bookmark',
+        removeBookMarks:'Remove',
+        zoomTo:'ZoomTo',
+        clearBookMarks:'Clear All',
+        conditionSetting:"Set Conditions",
+        land_area:"Area Size(ha)",
+        owner_count:"Owner Counts",
+        parcelhhi:"HHI",
+        transaction:"Transactions",
+        parcelcnt:"Number of Parcels",
+        area_sum: "Total Area Size (ha)",
+        aw_hhi: "Area Weighted HHI",
+        area_std:"Std of Area Size",
+        filterConditions: "Display Farmlands",
+        resetConditions: "Reset",
+        type: "AVO Types",
+        condition:"Conditions",
+        Type1: {title:"Type 1(HHL)",
+            condition1:"Total Area Size >= 1 (ha)",
+            condition2:"Number of Parcels <= 10",
+            condition3: "Area-weighted HHI >= 0.6"
+        },
+        Type2: {title:"Type 2(HHH)",
+            condition1:"Total Area Size >= 1.5 (ha)",
+            condition2:"Number of Parcels <= 20"
+        },
+        Type3:{title:"Type 3(HLL)",
+            condition1:"Total Area Size >= 1.5 (ha)",
+            condition2:"Area-weighted HHI >= 0.5"
+        },
+        Type4:{title:"Type 4(HLH)",
+            condition1:"Total Area Size >= 1 (ha)",
+            condition2:"Standard Deviation of Area Size <= 0.25",
+            condition3:"Area-weighted HHI >= 0.6"
+        },
+        Type5: {title:"Type 5(LHL)",
+            condition1:"Total Area Size >= 5 (ha)",
+            condition2:"Number of Parcels <= 15",
+            condition3:"Area-weighted HHI >= 0.3"
+        },
+        Type6:{ title:"Type 6(LLL)",
+                condition1:"Total Area Size >= 1.5 (ha)",
+                condition2:"Number of Parcels <= 15",
+                condition3:"Area-weighted HHI >= 0.5"
+        },
+        Type7:{ title: "Type 7(LHH)",
+                condition1:"Total Area Size >= 5 (ha)",
+                condition2:"Standard Deviation of Area Size <= 0.5",
+                condition3:"Area-weighted HHI >= 0.3"
+        },
+        Type8:{  title:"Type 8(LLH)",   
+                condition1:"Total Area Size >= 4(ha)",
+                condition2:"Number of Parcels <= 15",
+                condition3:"Area-weighted HHI >= 0.5"
+        }   
       },
       basemap:{
         basemapName: 'Taoyuan Land Parcels',
@@ -84,9 +179,10 @@ const messages = {
         methodAlert: 'Please select a method for spatial analysis.',
         layerAlert: 'Please execute spatial analysis before displaying results.',
         removeAlert: 'Please remove the existing layer.',
-        spatialTitle1: 'Spatial Analysis: Global',
-        spatialTitle2: 'Spatial Analysis: Local',
-        spatialTitle3: 'Spatial Analysis',
+        spatialTitle1: 'Global',
+        spatialTitle2: 'Local',
+        spatialTitle: 'Spatial Analysis',
+        selectArea:' Select Area',
         defineMethod: 'Choose Spatial Analysis Approach',
         executeGlobal: 'Start Analysis',
         clearGlobal: 'Clear',
@@ -100,7 +196,8 @@ const messages = {
         removeClusterLayer: 'Remove Layer',
         showMoranPlot: "Display Moran's Scatter Plot",
         MoranPlot: "Moran's I Test: HHI",
-        Intro:"Help"
+        Intro:"Help",
+        Report:"Export Report"
       },
       rankareas: {
         ranktitle: 'Rank Areas by Defined Conditions',
@@ -118,23 +215,117 @@ const messages = {
         clearrank:'Clear Conditions',
         startrank:'Start Evaluation',
         ranklist: 'Rank List'
+      },
+      printmap:{
+          maptitle: "Map Title ",
+          mapdescription: "Map Description"
       }
     },
 
     tw: {
+      version:{
+        basic:'簡易版',
+        advanced:'專業版'
+      },
       title: {
         version:'選擇版本',
         websitename: '行政院農業委員會地理資訊測試系統',
         basemapComponentName: '套疊圖層',
         calculationComponentName: '係數計算',
+        newcalculationComponentName:'統計計算',
         spatialComponentName: '空間分析',
         rankComponentName: '條件排序',
         printComponentName:'列印設定'
       },
       simpleBasemap:{
-        parcelName: "桃園市全區地籍圖",
-        HHIName: "桃園市HHI分佈圖",
-        opacity:"透明度"
+        navbar_layer: "圖層套疊",
+        navbar_decision:"決策支援",
+        navbar_rawfilter:"農地篩選",
+        geoboundaries:"地理區界",
+        attributes:"地籍屬性",  
+        others: "其他圖層", 
+        theme:"決策支援",      
+        bivariate:'雙變數地圖測試',
+        statistics:'農地資訊敘述統計',
+        originCount:'原始資料總農地數',
+        filteredCount:'篩選後總農地數',
+        filteredRatio:'符合篩選條件的農地比例',
+        parcelName: "農地地籍圖",
+        sectionName:"全台段籍圖",
+        townshipName:'全台行政區界圖',
+        villageName:"全台村里界圖",  
+        landuseName:'國土利用現況調查成果圖',  
+        area: '農地面積大小',
+        owner: '農地所有權狀態',
+        parcelhhi:"農地產權複雜度HHI",
+        hhi:"農地產權複雜度HHI",
+        transactionPrice:"農地交易單價",
+        waterRouteName:"農田水利灌排渠道系統圖",
+        orthoName:"全臺灣正射影像圖",
+        landsuitName:'農地重要性等級圖',
+        landproductName:'農地自然生產力等級圖',
+        opacity:"透明度",
+        cluster:"產權複雜度聚集區",
+        selectCounty: "指定區域",
+        county:{taoyuan:"桃園市",
+                chiayi: "嘉義縣"
+        },
+        addBookMarks:'新增地圖書籤',
+        removeBookMarks:'刪除',
+        zoomTo:'縮放至',
+        clearBookMarks:'清除所有書籤',
+        conditionSetting:"設定條件",
+        land_area:"農地面積",
+        owner_count:"所有權人數",
+        transaction:"農地交易紀錄",
+        parcelcnt:"聚集區內農地數",
+        area_sum: "聚集區面積(公頃)",
+        area_std:"聚集區面積標準差",
+        aw_hhi: "聚集區面積加權HHI ",
+        filterConditions: "篩選合適農地群",
+        resetConditions: "重設指定條件",
+        type: "產權複雜聚集區類別",
+        condition:"需要評估條件",
+        Type1: {title:"第一類（HHL）",
+            condition1:"聚集區總面積 >= 1 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.6 "
+        },
+        Type2: {title:"第二類（HHH）",
+            condition1:"聚集區總面積 >= 1 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.6 "
+        },
+        Type3:{title:"第三類（HLL）",
+            condition1:"聚集區總面積 >= 1 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.6 "
+        },
+        Type4:{title:"第四類（HLH）",
+            condition1:"聚集區總面積 >= 1 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.6 "
+        },
+        Type5: {title:"第五類（LHL）",
+            condition1:"聚集區總面積 >= 1 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.6 "
+        },
+        Type6:{ title:"第六類（LLL）",
+            condition1:"聚集區總面積 >= 1.5 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.5 "
+        },
+        Type7:{ title: "第七類（LHH）",
+            condition1:"聚集區總面積 >= 5 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.3 "
+        },
+        Type8:{  title:"第八類（LLH）",   
+            condition1:"聚集區總面積 >= 4 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.5",
+            condition3: "面積加權HHI >= 0.5 "
+        }
     },
       basemap:{
         basemapName: '桃園市地籍圖',
@@ -153,13 +344,17 @@ const messages = {
         choosewarning: '若已在地圖上選擇農地,則點選『顯示HHI』查看農地產權複雜度',
         calculate: '顯示HHI'
       },
+      newcalculation:{
+
+      },
       spatialanalysis:{
         methodAlert: '請先選擇空間分析方法',
         layerAlert: '請先執行空間分析',
         removeAlert: '請先清除原有圖層',
-        spatialTitle1: '產權複雜度空間分析：全域',
-        spatialTitle2: '產權複雜度空間分析：區域',
-        spatialTitle3: '產權複雜度空間分析',
+        selectArea: '指定分析區域',
+        spatialTitle1: '全域',
+        spatialTitle2: '區域',
+        spatialTitle: '產權複雜度空間分析',
         defineMethod: '選擇空間分析方法',
         executeGlobal: '開始分析',
         clearGlobal: '重新計算',
@@ -173,7 +368,8 @@ const messages = {
         removeClusterLayer: '清除聚集區圖層',
         showMoranPlot: "顯示Moran's I 散佈圖",
         MoranPlot: "產權複雜度HHI Moran's I 檢定結果",
-        Intro:"幫助"
+        Intro:"幫助",
+        Report:"產製報告"
       },
       rankareas:{
         ranktitle: '設定條件排序產權複雜聚集區',
@@ -191,6 +387,10 @@ const messages = {
         clearrank:'清除並重新排序',
         startrank:'開始排序',
         ranklist: '排序列表'
+      },
+      printmap:{
+        maptitle: "地圖標題",
+        mapdescription: "地圖敘述"
       }    
     }
 }
@@ -208,7 +408,7 @@ const app = new Vue({
     i18n:i18n,
     store: store,
     mixins:[calculationMixins],
-    //components:{" baseMapComponent" : UI_BaseMap_Component},
+    components:{},
     data: function () {
         return {
             currentComponentName:"",
@@ -224,24 +424,15 @@ const app = new Vue({
     watch:{
     },
     methods: {
-        shrinkPanel: function() {
-
+        PrintSimpleMap: function(){
+            window.print();  
         },
-        //PrintMap: function() {                
-        //    let myMapHTML= document.getElementById("map");
-        //    let mywindow = window.open("", "PrintTheMap","width=600,height=800");                                                                                                                                                                                                                                                                                                                                      
-        //    let header = '<html><head><link rel="stylesheet" href="/static/css/main.css" media="print"/> <link rel="stylesheet" href="/static/css/spatial.css"/> <link rel="stylesheet" href="/static/css/rank.css"/> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" /></head>'
-        //    //Adding the header to the window
-        //    mywindow.document.write(header);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-        //    //Adding the map into the body
-        //    mywindow.document.write("<body>"+myMapHTML+"<body>");
-        //    mywindow.document.close(); // necessary for IE >= 10
-        //    mywindow.focus(); // necessary for IE >= 10
-        //    mywindow.print();
-        //    mywindow.close();
-        // 
-        // },
-
+        shrinkSimplePanel: function() {
+            this.toShowPanelInfoContainer = false;
+        },
+        showSimplePanel: function() {
+            this.toShowPanelInfoContainer = true;
+        },
         btnZoomHandler: function (isZoomIn) {
             if (isZoomIn) {
                 map.zoomIn();
@@ -312,18 +503,13 @@ const app = new Vue({
             this.showEnterWindow = false;
             this.showExpertVersion = true;
             this.showSimpleVersion= false;
+            this.toShowPanelInfoContainer = false;
         },
         changeToSimpleVersion:function() {
             this.showSimpleVersion= true;
             this.showExpertVersion = false;
-        },
-        showPrintConfigure: function(componentName){
-            this.showPrint = true;     
-            this.currentComponentName = componentName       
-        },
-        closePrintConfigure: function(){
-            this.showPrint = false;
-            this.currentComponentName = ""
+            this.toShowPanelInfoContainer = true;
+            this.changeCurrentComponentName('simpleBaseMapComponent')
         },
         getTaoyuanFromDB:function(){
             var self = this;
@@ -356,7 +542,7 @@ const app = new Vue({
     beforeCreate:function (){
         var vm = this;
         if (Object.keys(vm.$options.components).length < 1) {
-            require(['static/js/components/UI_BaseMap','static/js/components/UI_Calculation', 'static/js/components/UI_SpatialAnalysis', 'static/js/components/UI_RankConditions','static/js/components/simpleUI_SpatialAnalysis', 'static/js/components/simpleUI_BaseMap', 'static/js/components/UI_PrintMap'], function (UI_BaseMapComponents,UI_CalculationComponents, UI_SpatialComponents, UI_RankComponents, simpleUI_spatialComponents, simpleUI_BaseMapComponents, UI_PrintMapComponents) {
+            require(['static/js/components/UI_BaseMap','static/js/components/UI_Calculation', 'static/js/components/UI_SpatialAnalysis', 'static/js/components/UI_RankConditions','static/js/components/simpleUI_SpatialAnalysis', 'static/js/components/simpleUI_BaseMap', 'static/js/components/UI_PrintMap','static/js/components/UI_NewCalculation'], function (UI_BaseMapComponents,UI_CalculationComponents, UI_SpatialComponents, UI_RankComponents, simpleUI_spatialComponents, simpleUI_BaseMapComponents, UI_PrintMapComponents,  UI_NewCalculationComponents) {
               
                 for (var key in UI_BaseMapComponents) {
                     vm.$options.components[key] = UI_BaseMapComponents[key];
@@ -378,7 +564,10 @@ const app = new Vue({
                 } 
                 for (var key in UI_PrintMapComponents) {
                     vm.$options.components[key] = UI_PrintMapComponents[key];
-                }                    
+                }  
+                for (var key in UI_NewCalculationComponents) {
+                    vm.$options.components[key] =  UI_NewCalculationComponents[key];
+                }                                    
             });
         }
     },

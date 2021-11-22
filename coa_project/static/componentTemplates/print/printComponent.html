@@ -1,39 +1,24 @@
 <!--列印頁面-->
-<div id= "print-container" class= "print-container">
-    <div class="print-config">
+<div id= "print-container">
+    <div class="print-config d-print-none">
         <div class="print-config-info">
             <strong>列印設定操作說明</strong>
         </div>
         <div class="print-config-block">
-            <div class="print-config-title">地圖標題</div>
-            <button class="print-text-btn">B</button>
-            <button class="print-text-btn">I</button>
-            <button class="print-text-btn">U</button>
-            <input type="text" placeholder="請輸入地圖標題">                
+            <div class="print-config-title" v-html="$t('printmap.maptitle')"></div>
+            <input v-model="printform.printTitle">                
         </div>
         <div class="print-config-block">
-            <div class="print-config-title">地圖敘述</div>
-            <button class="print-text-btn">B</button>
-            <button class="print-text-btn">I</button>
-            <button class="print-text-btn">U</button>
-            <input type="text" placeholder="請輸入地圖敘述">                
+            <div class="print-config-title" v-html="$t('printmap.mapdescription')"></div>
+            <input v-model="printform.printDescription">                
         </div>
-        <div class="print-config-block">
-            <div class="print-config-title">地圖內容</div>
-            <button class="print-text-btn">B</button>
-            <button class="print-text-btn">I</button>
-            <button class="print-text-btn">U</button>
-            <input type="text" placeholder="請輸入地圖內容">                
-        </div>
-        <div class="print-config-block">
-            <div class="print-config-title">輸出尺寸</div>
-            DPI: <input type="number">
-            <select type="radio">一般尺寸</select>
-        </div>
-        <button class="btn btn-secondary btn-sm">輸出成PDF</button>
-        <button class="btn btn-secondary btn-sm" v-on:click="PrintMap">輸出成PNG</button>
-    </div>
-    <div id='snapshot'></div>
+                                                                                 
+        <button class="btn btn-secondary btn-sm" v-on:click="PrintMap">列印</button>
+    </div>  
+    <div class="print-content-box d-none d-print-block">
+        <h4>{{ printform.printTitle }}</h4>
+        <p>{{ printform.printDescription }}</p>        
+    </div>                                       
 </div>
 
 

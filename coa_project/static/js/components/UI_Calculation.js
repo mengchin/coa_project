@@ -29,7 +29,7 @@ define([],function(){
                     colors:['#74a77b','#b9c799','#f3e8c6','#ebba88','#e88462','#de425b']  //小到大
                 };
             },
-            methods: {
+            methods: {            
               getTestMixins: function () {
                 var self = this;
                 var promise = new Promise(function(resolve, reject){
@@ -303,6 +303,7 @@ define([],function(){
                         },
                         mounted: function () {
                             this.initDraggable();
+                            
                         }
                     };
                 return {

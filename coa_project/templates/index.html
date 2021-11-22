@@ -5,12 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COA</title>
+    <!--CSS-->
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/spatial.css">
     <link rel="stylesheet" href="/static/css/rank.css">
+    <link rel="stylesheet" href="/static/css/calculation.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    
+    <!---leaflet-->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!---Other JS Library-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wicket/1.3.6/wicket.min.js"></script>
     <link rel="icon" href="/static/image/basic/coa_icon.jpg" type="image/ico"/>
     <link rel="shortcut icon" href="/static/image/basic/coa_icon.jpg" type="image/x-icon"/>
@@ -18,10 +24,14 @@
     <script src="https://unpkg.com/@turf/turf@6.3.0/turf.min.js"></script>
     <script src="/static/js/classybrew.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
     <!---bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+    <!--D3.js---->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!--Chart.js-->    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <style>      
@@ -29,8 +39,8 @@
 
 <body>
     <!--地圖經緯度資訊-->
-    <div id='map-coordinate'>
-        <div class="info">
+    <div id='map-coordinate' class= "d-print-none">
+        <div class="info ">
             <div id="currentWGS84" style="padding: 2px 0 2px 0;">經緯度<span id="currentWGS84Txt"></span></div>
         </div>
         <div class="info">
@@ -42,7 +52,7 @@
     <!--地圖主頁面-->
     <div id="app">
         <!--上方導覽列-->
-        <div class='navbar d-flex align-items-center justify-content-left'>
+        <div class='navbar d-flex align-items-center justify-content-left d-print-none'>
             <div class='navbar-content'>
                 <h1 v-html="$t('title.websitename')"></h1>            
             </div>   
@@ -53,8 +63,8 @@
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false" v-html="$t('title.version')">
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                      <li><button class="dropdown-item" type="button" v-on:click="enterCheckWindow">Master Yoda</button></li>
-                      <li><button class="dropdown-item" type="button" v-on:click="changeToSimpleVersion">JJ Binks</button></li>
+                      <li><button class="dropdown-item" type="button" v-on:click="enterCheckWindow" v-html="$t('version.advanced')"></button></li>
+                      <li><button class="dropdown-item" type="button" v-on:click="changeToSimpleVersion" v-html="$t('version.basic')"></button></li>
                     </ul>
                 </div> 
                     {% if request.user.is_authenticated %}
@@ -70,43 +80,27 @@
         </div>
         <!---側邊視窗--->     
         <div>
-            <div class="panel">                  
-                <!---簡易版側邊視窗--->         
-                <div id="simplePanel" v-show="showSimpleVersion">
-                    <div v-on:click="changeCurrentComponentName('simpleBaseMapComponent')" class="panel-function" >
-                    <div class="function d-flex">
-                        <div class="w-25 d-flex justify-content-center align-items-center">
-                            <i class="fa fa-map" aria-hidden="true"></i>
-                        </div>
-                        <div class="w-75 d-flex flex-column text-center font-white">
-                            <div v-html="$t('title.basemapComponentName')">
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div v-on:click="changeCurrentComponentName('simpleSpatialComponent')" class="panel-function" >
-                    <div class="function d-flex">
-                        <div class="w-25 d-flex justify-content-center align-items-center">
-                            <i class="fa fa-th-list" aria-hidden="true"></i>
-                        </div>
-                        <div class="w-75 d-flex flex-column text-center font-white">
-                            <div v-html="$t('title.spatialComponentName')"> 
-                            </div>
-                        </div>
-                    </div>
-                    </div>            
-                    <div class="panel-info-container" v-if="toShowPanelInfoContainer">
-                        <div class="info-container-header">
-                            <div v-on:click="shrinkPanel"><i class="fa fa-minus" aria-hidden="true"></i></div>
-                            <div v-on:click="closePanel"><i class="fa fa-times" aria-hidden="true"></i></div>
-                        </div>
+            <div v-show="showSimpleVersion">                             
+                <!---簡易版側邊視窗--->     
+                <div id="simplePanel" class="panel-simple d-print-none"  v-if="toShowPanelInfoContainer">    
+                    <div class= "panel-simple-header">                
+                        <div><i class="fa fa-minus-circle fa-lg " aria-hidden="true"></i></div>
+                        <div><i class="fa fa-question-circle fa-lg" aria-hidden="true"></i></div> 
+                        <div v-on:click="PrintSimpleMap"><i class="fa fa-print fa-lg" aria-hidden="true"></i></div> 
+                     </div>   
+                    <div class="panel-sample-info-container">                         
                         <component v-bind:is="currentComponentName"></component>
                     </div>
                 </div>
+                <div class="simple-shrink d-print-none" v-on:click="showSimplePanel">
+                    <i class="fa fa-sliders fa-lg" aria-hidden="true"></i>                    
+                </div>
+            </div>
+            <div class="panel" v-show="showExpertVersion">   
                 <!---專業版側邊視窗-->
-                <div id="expertPanel" v-show="showExpertVersion">
-                    <div v-on:click="changeCurrentComponentName('baseMapComponent')" class="panel-function" >
-                        <div class="function d-flex">
+                <div id="expertPanel">
+                    <div v-on:click="changeCurrentComponentName('baseMapComponent')" class="panel-function d-print-none" >
+                        <div class="function d-flex ">
                             <div class="w-25 d-flex justify-content-center align-items-center">
                                 <i class="fa fa-map" aria-hidden="true"></i>
                             </div>
@@ -116,7 +110,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-on:click="changeCurrentComponentName('calculationComponent')" class="panel-function">
+                    <div v-on:click="changeCurrentComponentName('calculationComponent')" class="panel-function d-print-none">
                         <div class="function d-flex">
                             <div class="w-25 d-flex justify-content-center align-items-center">
                                 <i class="fa fa-calculator" aria-hidden="true"></i>
@@ -127,10 +121,21 @@
                             </div>
                         </div>
                     </div>
-                    <div v-on:click="changeCurrentComponentName('spatialComponent')" class="panel-function">
+                    <div v-on:click="changeCurrentComponentName('newcalculationComponent')" class="panel-function d-print-none">
                         <div class="function d-flex">
                             <div class="w-25 d-flex justify-content-center align-items-center">
-                                <i class="fa fa-th-list" aria-hidden="true"></i>
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            </div>
+                            <div class="w-75 d-flex flex-column text-center font-white">
+                                <div v-html="$t('title.newcalculationComponentName')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div v-on:click="changeCurrentComponentName('spatialComponent')" class="panel-function d-print-none">
+                        <div class="function d-flex">
+                            <div class="w-25 d-flex justify-content-center align-items-center">
+                                <i class="fa fa-tasks" aria-hidden="true"></i>
                             </div>
                             <div class="w-75 d-flex flex-column text-center font-white">
                                 <div v-html="$t('title.spatialComponentName')">
@@ -138,10 +143,10 @@
                             </div>
                         </div>
                     </div>
-                    <div v-on:click="changeCurrentComponentName('rankComponent')" class="panel-function">
+                    <div v-on:click="changeCurrentComponentName('rankComponent')" class="panel-function d-print-none">
                         <div class="function d-flex">
                             <div class="w-25 d-flex justify-content-center align-items-center">
-                                <i class="fa fa-th-list" aria-hidden="true"></i>
+                                <i class="fa fa-list-ol" aria-hidden="true"></i>
                             </div>
                             <div class="w-75 d-flex flex-column text-center font-white">
                                 <div v-html="$t('title.rankComponentName')">
@@ -150,7 +155,7 @@
                         </div>
                     </div>
 
-                    <div v-on:click="showPrintConfigure('printComponent')" class="panel-function">
+                    <div v-on:click="changeCurrentComponentName('printComponent')" class="panel-function d-print-none">
                         <div class="function d-flex">
                             <div class="w-25 d-flex justify-content-center align-items-center">
                                 <i class="fa fa-print" aria-hidden="true"></i>
@@ -161,23 +166,16 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="panel-info-container" v-if="toShowPanelInfoContainer">
-                        <div class="info-container-header">
-                            <div v-on:click="shrinkPanel"><i class="fa fa-minus" aria-hidden="true"></i></div>
+                        <div class="info-container-header d-print-none">
+                            <div><i class="fa fa-minus" aria-hidden="true"></i></div>
                             <div v-on:click="closePanel"><i class="fa fa-times" aria-hidden="true"></i></div>
                         </div>
                         <component v-bind:is="currentComponentName"></component>
-                    </div>                         
-                    
+                    </div>                                   
                 </div>
             </div>           
-        </div>   
-        <!--列印視窗-->
-        <div class="print-container" v-if="showPrint">
-            <div class="print-container-header">
-                <div style="padding-right: 10px;" v-on:click="closePrintConfigure"><i class="fa fa-times" aria-hidden="true"></i></div>
-            </div>            
-            <component v-bind:is="currentComponentName"></component>
         </div>   
         <!--載入＆計算等待畫面-->
         <div id="loading">
@@ -186,17 +184,15 @@
         </div>
         <!--選擇版本後顯示側邊視窗-->
         <div id="form-container" v-show="showEnterWindow">
-            <h5>Please select the right answer to enter Master Yoda version.</h5>
-            <h5>Who is the last Skywalker?</h5>
-            <input type="radio" v-model="versionCheck" value=1>Luke
-            <input type="radio" v-model="versionCheck" value=2>Leia Princess
-            <input type="radio" v-model="versionCheck" value=3>Kylo Ren
-            <input type="radio" v-model="versionCheck" value=4 v-on:click="changeToExpertVersion">Rey
-        </div>
+            <h5>專業版本為內部測試及更新用,請先以簡易版為主</h5>
+            <h6>確定要進入專業版嗎?</h6>
+            <input type="radio" v-model="versionCheck" value='No'>否
+            <input type="radio" v-model="versionCheck" value='Yes' v-on:click="changeToExpertVersion">是
+        </div>    
         <!--地圖-->
-        <div id="map">
-        </div>       
-        
+        <div id="map" class="multiply">            
+        </div>   
+
     </div>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-i18n@8"></script>
@@ -207,11 +203,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>                                                                                                                                                                                                                                                                                         
     <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
     <script src="/static/js/main.js"></script>
+    
+    <!----Other Leaflet JS Plugin ------>
     <script src="/static/js/choropleth.js"></script> 
     <script src="/static/js/L.TileLayer.BetterWMS.js"></script>
     <link rel="stylesheet" href="/static/css/leaflet.wmslegend.css"/>
     <script src="/static/js/leaflet.wmslegend.js"></script>
-    
-
-
 </html>

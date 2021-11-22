@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-v_=0n+pm^!urr3@$$t!@2alimr@q=3sit2nozdv0th+zr7b%tr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 
-                 'localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'leaflet',
     'geoland',
+    'chartjs',
     'corsheaders',
 ]
 

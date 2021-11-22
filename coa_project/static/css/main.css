@@ -5,11 +5,18 @@ html,body{
     height: 100%;
     width: 100%;
 }
+body {
+    webkit-print-color-adjust: exact !important;
+}
 #app{
     height: 100%;
     position: absolute;
     width: 100%;
     overflow: hidden;
+}
+
+.nav-tabs > li > button {
+  color: #d3d3d3;
 }
 
 #loading{
@@ -57,6 +64,10 @@ html,body{
     font-size: 26px;
     font-style: oblique;
 }
+
+.multiply {
+    mix-blend-mode: multiply;
+  }
 
 .btn-lang {
     background: #3C4E54;
@@ -108,11 +119,87 @@ html,body{
 
 }
 
+/**.panel-simple-header{
+    top:8%;
+    position: absolute;
+    left:350px;
+    width:60px;
+    height: 80px;
+    z-index: 1000;
+    background-color:gray;
+    color:rgb(19, 16, 16); 
+    padding: 5px 5px;
+    border-radius: 0px 0px 5px  5px ;
+    transition: .3s ease-out;
+    
+}/
+/**/
+.report-container {
+  position: fixed;
+  top:-5px;
+  background-color:#fff; 
+  left: -10px;
+  width:110%; 
+  height:100%;
+  padding-top:10px;
+  padding-bottom:10px;
+  padding-left: 15px ;
+}
+  
+.simple-shrink{
+    position: absolute;
+    z-index: 9000;
+    height:45px;
+    width: 45px;
+    left:3%;
+    top:11%;
+    border-radius: 5px;
+    background-color:gray;
+    border-color: #fff;
+    border-width: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+}
+
+.panel-simple{
+    height: 100%;
+    width: 350px;
+    position: absolute;
+    z-index: 9999;
+    padding: 1%;
+    background-color:#3C4E54;
+    color:#fff;
+    //border-right: 10px solid orange;
+    padding: 10px;
+}
+
+.panel-simple-info-container{
+    color:#fff;
+    //border-right: 10px solid orange;
+    padding: 15px;
+}
+.panel-simple-header{
+    padding-right: 10px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    align-items: center;
+}
+.panel-simple-header >div{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 .panel{
     height: 100%;
-    position: absolute;
-    z-index: 1;
-    background-color: #fff;
     width: 160px;
     position: absolute;
     z-index: 9999;
@@ -122,6 +209,7 @@ html,body{
     //border-right: 10px solid orange;
     padding: 20px;
 }
+
 .panel-function{
     border: 1px solid;
     border-radius: 5px;
@@ -165,14 +253,11 @@ html,body{
     cursor: pointer;
 }
 
-
 .print-container {
     position: absolute;
     left: 0;
-    width: 300px;
-    height: 100%;
+    height: 60%;
     overflow: auto;
-    background-color: #FFF;
     font-size: 14px;
     z-index: 10000;
 }
@@ -191,11 +276,16 @@ html,body{
 .print-config {
     padding-right:10px;
     padding-left: 10px;
+    padding-bottom: 10px;
     background-color: #FFF;   
     float: left; 
+    width: 100%;
 }
 
 .print-config-block {
+    background-color: #FFF;
+    font-size: 14px;
+    z-index: 10000;
     border: 1px solid grey;
     border-radius: 2px 2px 2px 2px;
     padding-left: 5px;
@@ -208,22 +298,73 @@ html,body{
     color: grey;
     padding-left: 10px;
 }
-.print-text-btn {
-    width: 25px;
-    height: 25px;
-    border: 1.5px solid grey;    
-    color:grey;
-    font-size: 12px;    
-    font-weight: bold;
-}
-
-.print-text-btn:active {
-    background-color: grey;
-    border-color: white;
-    color:white;
+.print-content-box{
+    position: fixed;
+    top: 0;
+    left: 0;  
+    background-color:rgb(231, 231, 231); 
+    width:200px; 
+    height:auto;
+    padding:10px 10px 10px 10px ;
+    z-index: 10000;   
 }
 
 img#screenshot {
-
 	border: 1px solid red;
 }
+
+@page {
+    size: A4 landscape;
+    margin: 0.5cm;
+}
+
+@media print{
+    
+    body {
+        font: 13pt Georgia, "Times New Roman", Times, serif;
+        line-height: 1.3;
+        color: #000;
+        -webkit-print-color-adjust: exact; 
+        }
+    .panel {
+        background-color: transparent !important;
+        color: black;
+    }
+
+}
+
+
+.slider {
+    position:relative;
+    justify-content: center;
+    align-items: center;
+    top: unset;
+    float: right;
+    -webkit-appearance: none;
+    width: 30%;
+    height: 5px;
+    border-radius: 3px;  
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%; 
+    background:#79d29e;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background:#79d29e;
+    cursor: pointer;
+  }

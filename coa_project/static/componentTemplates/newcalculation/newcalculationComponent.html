@@ -1,0 +1,55 @@
+<div id="calculationContainer" class="h-100 w-100 p-2"> 
+    <div>
+        <div class="test-select mb-2">
+        <label class="pl-1">計算農地產權複雜度HHI</label><br>
+            <button class="btn btn-warning btn-sm" v-on:click="GetData">開始計算</button> 
+        </div>
+        <hr>
+        <h5>統計分析</h5>
+        <p>---選擇行政區---<br>
+            <select name="towncode">
+                <option value="taoyuan"> 桃園區 </option>
+                <option value="zhongli"> 中壢區 </option>
+                <option value="daxi">    大溪區 </option>
+                <option value="yangmei"> 楊梅區 </option>
+                <option value="luzhu">   蘆竹區 </option>
+                <option value="dayuan">  大園區 </option>
+                <option value="guishan"> 龜山區 </option>
+                <option value="bade">    八德區 </option>
+                <option value="longtan"> 龍潭區 </option>
+                <option value="pingzheng">平鎮區</option>
+                <option value="xinwu">   新屋區 </option>
+                <option value="guanyin"> 觀音區 </option>
+                <option value="fuxing">  復興區 </option>
+            </select>
+        </p>
+        <p>---選擇欄位---<br>
+            <select name="attribute">
+                <option value="area"> 農地面積</option>
+                <option value="HHI"> 農地產權複雜度HHI</option>
+                <option value="count">農地所有權人數</option>    
+            </select>
+        </p>
+        <p>---統計方式---<br>
+            <select name="statics">
+                <option value="bar"> 統計圖</option>
+                <option value="table"> 表格</option>  
+            </select>
+        </p>
+    </div>
+    <div class="chart-container">      
+        <div class="chart-container-header">
+            <div><i class="fa fa-times" aria-hidden="true"></i></div>
+        </div>
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+              <tr v-for="(item, key) in ChartLabels" :key="key">
+                <td>{{ ChartLabels }}</td>
+              </tr>
+            </tbody>
+          </table>
+        <!---canvas id="myChart" width="400" height="400"></canvas--->
+    </div>
+</div>    

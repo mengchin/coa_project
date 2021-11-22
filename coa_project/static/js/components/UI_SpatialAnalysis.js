@@ -32,6 +32,7 @@ define([],function(){
             template: spatialComponentHtml,
             data: function () {
                return {
+                towncode:'',
                 showoutput: false,
                 isCheck:false, //勾選是否加入圖層
                 legendColor:[
@@ -43,6 +44,7 @@ define([],function(){
                         ], // Area-weighted HHI 圖例
                 globalMethod: '', //指定全域空間分析方法
                 globalData: [], //全域空間分析結果
+                globalMethodName: '',
                 showGlobalResult: false,
                 spatialMethod: '', //指定區域空間分析方法
                 spatialData: [], //區域空間分析結果
@@ -78,13 +80,15 @@ define([],function(){
             //},
 
             //************************* 共用部份 *******************//
+            // 提交表單傳值到後端 //
+
             // 圖層彈跳視窗顯示及內容//
             /**
              * 針對 geojson 上每個feature 進行相關事件註冊
              * @param {*} feature  shape
              * @param {*} layer  geojson 圖層
              */
-             onEachShape:function(feature, layer){
+            onEachShape:function(feature, layer){
                 var self = this; 
                 layer.on('click', function (e) {
                     /* 這裏的 this scope 指的是 layer 回傳的 shape */
@@ -148,14 +152,12 @@ define([],function(){
                         alert(i18n.t("spatialanalysis.layerAlert"))
                     }                   
             },
-
             removeClusterLayer: function(){
                 var self = this;
                 this.$store.state.ClusterLayer.remove();
                 this.$store.state.ClusterLayer = undefined;
                 this.ClusterIsDisable = false;
             },
-
 
                 //******* 依照指定的方法拉不同空間分析結果的api *********//
                 // 全域空間分析結果 
@@ -165,7 +167,8 @@ define([],function(){
                     if (self.globalMethod == "") {
                         alert(i18n.t("spatialanalysis.methodAlert"));                        
                     } else if (self.globalMethod == "Moran's I Value:"){
-                        data_api = 'api/geoland/morans'
+                        this.globalMethodName = "Moran's I 空間自相關統計" 
+                        data_api = 'api/geoland/morans'+ "/" + this.towncode
                         var promise = new Promise(function(resolve, reject){
                             $('#loading')[0].style.display = 'flex'
                             //save initial api that has already retrieved//
@@ -175,9 +178,9 @@ define([],function(){
                                 resolve(self.globalData)
                             });                        
                         })
-                        return promise;
                     } else {
-                        data_api = 'api/geoland/geary'
+                        this.globalMethodName = "Geary's C 空間自相關統計" 
+                        data_api = 'api/geoland/geary'+ "/" + this.towncode
                         var promise = new Promise(function(resolve, reject){
                             $('#loading')[0].style.display = 'flex'
                             //save initial api that has already retrieved//
@@ -199,7 +202,7 @@ define([],function(){
                     if (self.spatialMethod == "") {
                         alert(i18n.t("spatialanalysis.methodAlert"));                        
                     } else if (self.spatialMethod == "Gstar"){
-                        data_api = 'api/geoland/Gstar'
+                        data_api = 'api/geoland/Gstar'+ "/" + this.towncode
                         var promise = new Promise(function(resolve, reject){
                             $('#loading')[0].style.display = 'flex'
                             //save initial api that has already retrieved//
@@ -211,7 +214,7 @@ define([],function(){
                         })
                         return promise;
                     } else {
-                        data_api = 'api/geoland/LISA'
+                        data_api = 'api/geoland/LISA'+ "/" + this.towncode
                         var promise = new Promise(function(resolve, reject){
                             $('#loading')[0].style.display = 'flex'
                             //save initial api that has already retrieved//
@@ -233,7 +236,7 @@ define([],function(){
                     var promise = new Promise(function(resolve, reject){
                         $('#loading')[0].style.display = 'flex'
                         //save initial api that has already retrieved//
-                        $.get(website_url+'api/geoland/hotspots', function(data, status){
+                        $.get(website_url+'api/geoland/hotspots'+ "/" + this.towncode, function(data, status){
                             self.$store.state.ClusterArea.push(data)
                             $('#loading')[0].style.display = 'none'
                             resolve(self.$store.state.ClusterArea)
@@ -344,10 +347,11 @@ define([],function(){
                    $(".panel-info-container").draggable();
 
                 },
-                //async print () {
-                //    // Pass the element id here
-                //    await this.$htmlToPaper('printMe');
-                //}  
+
+                //********  列印報表 ******/
+                PrintReport:function() {
+                    window.print()
+                }  
             },
 
             mounted: function () {

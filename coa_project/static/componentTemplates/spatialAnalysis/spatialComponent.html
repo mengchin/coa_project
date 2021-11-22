@@ -5,49 +5,60 @@
     </div --->
     
     <div class="test-select mb-2">
+        <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle')"></h5>
+        <!---選擇執行區域---->
+        <p style="padding-left:10px;">   
+            <label class="pl-1" v-html="$t('spatialanalysis.selectArea')"></label><br>
+            <select name="towncode" v-model= "towncode">
+                    <option value="taoyuan"> 桃園區</option>
+                    <option value="zhongli"> 中壢區</option>
+                    <option value="daxi">    大溪區</option>
+                    <option value="yangmei"> 楊梅區</option>
+                    <option value="luzhu">   蘆竹區</option>
+                    <option value="dayuan">  大園區</option>
+                    <option value="guishan"> 龜山區</option>
+                    <option value="bade">    八德區</option>
+                    <option value="longtan"> 龍潭區</option>
+                    <option value="pingzheng">平鎮區</option>
+                    <option value="xinwu">   新屋區</option>
+                    <option value="guanyin"> 觀音區</option>
+                    <option value="fuxing">  復興區</option>
+            </select>
+        </p>
         <!--全域空間分析-->        
         <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle1')"></h5>
-        <!---選擇執行區域---->
-        <form method="get" action='.'>           
-            <select name = "countyname">
-                <option value="zhongli">中壢區</option>
-                <option value="dayuan">大園區</option>
-                <option value="fuxing">復興區</option>
-            </select>
-            <input type="submit" value="選擇該區域" />
-        </form>
-        <!---選擇執行方法---->
-        <p style="padding-left:10px;">    
-            <label class="pl-1" v-html="$t('spatialanalysis.defineMethod')"></label>        
-            <select name="" id= "spatialResult" v-model= "globalMethod">                                                                                                                                                                                                                                       
-                <option value="Moran's I Value:">Moran's I</option>
-                <option value="Geary C Value:">Geary's C</option>
-            </select> 
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeGlobal')" v-on:click= "getGlobalData"></button>
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearGlobal')" v-on:click= "clearGlobalData"></button>    
-        </p>
-        <div id= globalResult style="padding-left:10px;"> 
-            {{ globalMethod }} {{ globalData[0] }} <br>            
-        </div> 
-        <p style="padding-left: 10px;">
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showMoranPlot')" v-on:click= "showMoransPlot"></button>
-        </p>        
+            <!---選擇執行方法---->
+            <p style="padding-left:10px;">    
+                <label class="pl-1" v-html="$t('spatialanalysis.defineMethod')"></label>        
+                <select name="" id= "spatialResult" v-model= "globalMethod">                                                                                                                                                                                                                                       
+                    <option value="Moran's I Value:">Moran's I</option>
+                    <option value="Geary C Value:">Geary's C</option>
+                </select> 
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeGlobal')" v-on:click= "getGlobalData"></button>
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearGlobal')" v-on:click= "clearGlobalData"></button>    
+            </p>
+            <div id= globalResult style="padding-left:10px;"> 
+                {{ globalMethod }} {{ globalData[0] }} <br>            
+            </div> 
+            <p style="padding-left: 10px;">
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showMoranPlot')" v-on:click= "showMoransPlot"></button>
+            </p>        
         <hr>
         <!--區域空間分析-->
         <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.spatialTitle2')"></h5>
-        <p style="padding-left:10px;">
-            <label class="pl-1" v-html="$t('spatialanalysis.defineMethod')"></label>
-            <select name="" id= "spatialResult" v-model= "spatialMethod">                                                                                                                                                                                                                                       
-                <option value="LISA">LISA</option>
-                <option value="Gstar">Getis Ord G*</option>
-            </select> 
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click = "getSpatialData"></button>&nbsp;
-            <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearSpatial')" v-on:click = "clearSpatialData"></button>
-            <p style="padding-left:10px; line-height: 24px;">
-                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showSpatialLayer')" v-on:click = "addSpatialLayer"></button> 
-                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeSpatialLayer')" v-on:click = "removeSpatialLayer"></button>
-            </p>
-        </p> 
+            <p style="padding-left:10px;">
+                <label class="pl-1" v-html="$t('spatialanalysis.defineMethod')"></label>
+                <select name="" id= "spatialResult" v-model= "spatialMethod">                                                                                                                                                                                                                                       
+                    <option value="LISA">LISA</option>
+                    <option value="Gstar">Getis Ord G*</option>
+                </select> 
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.executeMethod')" v-on:click = "getSpatialData"></button>&nbsp;
+                <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.clearSpatial')" v-on:click = "clearSpatialData"></button>
+                <p style="padding-left:10px; line-height: 24px;">
+                    <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.showSpatialLayer')" v-on:click = "addSpatialLayer"></button> 
+                    <button class="btn btn-warning btn-sm" v-html="$t('spatialanalysis.removeSpatialLayer')" v-on:click = "removeSpatialLayer"></button>
+                </p>
+            </p> 
         <hr>
         <!--聚集區計算-->
         <h5 style="padding-left: 10px; padding-top: 5px;" v-html="$t('spatialanalysis.clusterTitle')"></h5>
@@ -59,18 +70,21 @@
             </p>
             <p style="padding-left:10px;">
                 <button class="btn btn-info btn-sm" v-html="$t('spatialanalysis.Intro')" v-on:click = "showIntro"></button>
+                <button class="btn btn-info btn-sm" v-on:click="PrintReport" v-html="$t('spatialanalysis.Report')"></button>
             </p>            
         </p>
         
     </div>     
-       
-    <div class="morans-container" v-show="MoransPlot">
+    
+    <!---Moran's I 散布圖視窗-->
+    <div class="morans-container d-print-none" v-show="MoransPlot">
         <div class="morans-container-header">
             <div v-on:click="closeMoransPlot"><i class="fa fa-times" aria-hidden="true"></i></div>
         </div>
         <h5 v-html="$t('spatialanalysis.MoranPlot')"></h5> 
         <div v-html='Moran' style="padding-left: 10px; padding-bottom: 10px;"></div>
-    </div>        
+    </div>  
+
     
     <!--空間分析結果圖例-->                                                                                                                                                                                                                                           
     <!---div class="legend d-flex flex-column">
@@ -84,7 +98,8 @@
         <div v-for="(item,index) in legendColor"><i classs="icon" :style="{ backgroundColor: item.color}"></i><span>{{ item.name }}</span></div>
     </div--->
 
-    <div class="intro-container" v-show="InfoWindow">
+    <!---幫助視窗(空間分析功能敘述)---->
+    <div class="intro-container d-print-none" v-show="InfoWindow">
         <div class="intro-container-header">
             <div v-on:click="closeIntro"><i class="fa fa-times" aria-hidden="true"></i></div>
         </div>        
@@ -132,6 +147,18 @@
                 <li>面積標準差(area_sum): 聚集區內所有農地面積的總和，即該聚集區的面積。</li>
             </ul>        
         </p>        
+    </div>
+
+    <div id="report" class="report-container d-none d-print-block">
+        <h2>空間分析結果</h2>
+            <p>
+                利用產權複雜度衡量指標HHI執行空間分析後成果如下：
+                <ul>
+                    <li>採用的空間分析方法: <span  v-html='globalMethodName'></span>  </li>
+                    <li>計算成果：<span v-html='globalMethod'></span><span v-html='globalData[0]'></span></li>
+                </ul>
+            </p>      
+            <div v-html='Moran' style="padding-left: 10px; padding-bottom: 10px;"></div> 
     </div>
     
 </div>                                                                          
