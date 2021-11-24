@@ -52,7 +52,7 @@ define([],function(){
                 SpatialIsDisable: false, //空間分析圖層開關
                 ClusterIsDisable: false,//聚集區圖層開關
                 MoransPlot: false, // Moran's I散佈圖開關
-                Moran : `<img src = "http://127.0.0.1:8000/api/geoland/morans_scatter">`,
+                Moran : `<img src = "http://35.76.62.63:8000/api/geoland/morans_scatter">`,
                 InfoWindow: false
                }
             },
