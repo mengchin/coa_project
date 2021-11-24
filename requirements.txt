@@ -15,7 +15,9 @@ decorator==4.4.2
 deprecation==2.1.0
 descartes==1.1.0
 Django==3.2.4
+django-chartjs==2.2.1
 django-cors-headers==3.7.0
+django-filter==2.4.0
 django-leaflet==0.28.1
 docutils==0.17.1
 esda==2.3.6

@@ -119,42 +119,44 @@ var calculationMixins = {
         type: "AVO Types",
         condition:"Conditions",
         Type1: {title:"Type 1(HHL)",
-            condition1:"Total Area Size >= 1 (ha)",
-            condition2:"Number of Parcels <= 10",
-            condition3: "Area-weighted HHI >= 0.6"
+            condition1:"Total Area Size > 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size > 0.12",
+            condition3: "Area-weighted HHI > 0.5945"
         },
         Type2: {title:"Type 2(HHH)",
-            condition1:"Total Area Size >= 1.5 (ha)",
-            condition2:"Number of Parcels <= 20"
+            condition1:"Total Area Size > 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size > 0.12",
+            condition3: "Area-weighted HHI <= 0.5945"
         },
         Type3:{title:"Type 3(HLL)",
-            condition1:"Total Area Size >= 1.5 (ha)",
-            condition2:"Area-weighted HHI >= 0.5"
+            condition1:"Total Area Size > 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size <= 0.12",
+            condition3: "Area-weighted HHI > 0.5945"
         },
         Type4:{title:"Type 4(HLH)",
-            condition1:"Total Area Size >= 1 (ha)",
-            condition2:"Standard Deviation of Area Size <= 0.25",
-            condition3:"Area-weighted HHI >= 0.6"
+            condition1:"Total Area Size > 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size <= 0.12",
+            condition3: "Area-weighted HHI <= 0.5945"
         },
         Type5: {title:"Type 5(LHL)",
-            condition1:"Total Area Size >= 5 (ha)",
-            condition2:"Number of Parcels <= 15",
-            condition3:"Area-weighted HHI >= 0.3"
+            condition1:"Total Area Size <= 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size > 0.12",
+            condition3: "Area-weighted HHI > 0.5945"
         },
         Type6:{ title:"Type 6(LLL)",
-                condition1:"Total Area Size >= 1.5 (ha)",
-                condition2:"Number of Parcels <= 15",
-                condition3:"Area-weighted HHI >= 0.5"
+            condition1:"Total Area Size<= 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size <= 0.12",
+            condition3: "Area-weighted HHI > 0.5945"
         },
         Type7:{ title: "Type 7(LHH)",
-                condition1:"Total Area Size >= 5 (ha)",
-                condition2:"Standard Deviation of Area Size <= 0.5",
-                condition3:"Area-weighted HHI >= 0.3"
+            condition1:"Total Area Size <= 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size > 0.12",
+            condition3: "Area-weighted HHI > 0.5945"
         },
         Type8:{  title:"Type 8(LLH)",   
-                condition1:"Total Area Size >= 4(ha)",
-                condition2:"Number of Parcels <= 15",
-                condition3:"Area-weighted HHI >= 0.5"
+            condition1:"Total Area Size <= 1.252 (ha)",
+            condition2:"Standard Deviation of Area Size <=s 0.12",
+            condition3: "Area-weighted HHI <= 0.5945"
         }   
       },
       basemap:{
@@ -287,44 +289,44 @@ var calculationMixins = {
         type: "產權複雜聚集區類別",
         condition:"需要評估條件",
         Type1: {title:"第一類（HHL）",
-            condition1:"聚集區總面積 >= 1 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.6 "
+            condition1:"聚集區總面積 > 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 > 0.12",
+            condition3: "面積加權HHI > 0.5945"
         },
         Type2: {title:"第二類（HHH）",
-            condition1:"聚集區總面積 >= 1 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.6 "
+            condition1:"聚集區總面積 > 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 > 0.12",
+            condition3: "面積加權HHI <= 0.5945"
         },
         Type3:{title:"第三類（HLL）",
-            condition1:"聚集區總面積 >= 1 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.6 "
+            condition1:"聚集區總面積 > 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.12",
+            condition3: "面積加權HHI > 0.5945"
         },
         Type4:{title:"第四類（HLH）",
-            condition1:"聚集區總面積 >= 1 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.6 "
+            condition1:"聚集區總面積 > 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.12",
+            condition3: "面積加權HHI <= 0.5945"
         },
         Type5: {title:"第五類（LHL）",
-            condition1:"聚集區總面積 >= 1 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.6 "
+            condition1:"聚集區總面積 <= 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 > 0.12",
+            condition3: "面積加權HHI > 0.5945"
         },
         Type6:{ title:"第六類（LLL）",
-            condition1:"聚集區總面積 >= 1.5 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.5 "
+            condition1:"聚集區總面積 <= 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.12",
+            condition3: "面積加權HHI > 0.5945"
         },
         Type7:{ title: "第七類（LHH）",
-            condition1:"聚集區總面積 >= 5 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.3 "
+            condition1:"聚集區總面積 <= 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 > 0.12",
+            condition3: "面積加權HHI <= 0.5945"
         },
         Type8:{  title:"第八類（LLH）",   
-            condition1:"聚集區總面積 >= 4 (公頃)",
-            condition2:"聚集區農地面積標準差 <= 0.5",
-            condition3: "面積加權HHI >= 0.5 "
+            condition1:"聚集區總面積 <= 1.252 (公頃)",
+            condition2:"聚集區農地面積標準差 <= 0.12",
+            condition3: "面積加權HHI <= 0.5945"
         }
     },
       basemap:{

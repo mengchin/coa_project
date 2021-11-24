@@ -67,6 +67,9 @@ define([],function(){
                 rawfilterOpacity:100,
                 transactionOpacity:100,
                 county:'',//指定要篩選的縣市
+                cluster_area:1.252, 
+                cluster_variance:0.12, 
+                cluster_ownership: 0.5495,//分類的條件
                 taoyuanParcelLayer:undefined,//地籍圖圖層
                 townshipLayer: undefined, //行政區界圖
                 villageLayer:undefined, //村里界圖

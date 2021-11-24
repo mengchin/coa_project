@@ -83,9 +83,9 @@
                             <input class="form-check-input" type="checkbox" v-model="landproductChecked"> 
                             <input type="range" min="0" max="100" value="50" step="10"class="slider" id="landproductOpacity" v-model= "landproductOpacity">
                             <br>    
-                        <label v-html="$t('simpleBasemap.bivariate')"></label> 
+                        <!---label v-html="$t('simpleBasemap.bivariate')"></label> 
                             <input class="form-check-input" type="checkbox" v-model="bivariateChecked"> 
-                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="bivariateOpacity" v-model= "bivariateOpacity">
+                            <input type="range" min="0" max="100" value="50" step="10"class="slider" id="bivariateOpacity" v-model= "bivariateOpacity"--->
                     </div>  
                 </div>
                 <br>
@@ -99,10 +99,6 @@
                         </div>
                     </div>
                     <div id="bookmark-list" style="padding-top: 10px;"> 
-                      <!---p v-for="(item,index) in bookmarks">Location {{index+1}}                        
-                        <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.zoomTo')" v-on:click="zoomToBookMarks(index)">ZoomTo</button>
-                        <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.removeBookMarks')" v-on:click="removeBookMarks(index)">Remove</button>
-                      </p--->
                       <p v-for="(item,index) in bookmarkName">{{index+1}}.{{item}}                       
                         <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.zoomTo')" v-on:click="zoomToBookMarks(index)">ZoomTo</button>
                         <button class="btn btn-outline-light btn-sm" v-html="$t('simpleBasemap.removeBookMarks')" v-on:click="removeBookMarks(index)">Remove</button>
@@ -121,6 +117,9 @@
                         <option v-html="$t('simpleBasemap.county.taoyuan')" value="taoyuan"></option>
                         <option v-html="$t('simpleBasemap.county.chiayi')" value="chiayi"></option>
                     </select> 
+                    <!--select v-model="selectCounty">
+                        <option v-for="condition in conditions" :value="condition">{{condition.countyname}}</option>
+                    </select--->
                 </div>
                 <br>
                 <div>
@@ -153,7 +152,7 @@
             <!---Policy NavBar-->
             <div class="nav flex-column" style="padding-left:15px; padding-right: 15px; ">
                 <h5 v-html="$t('simpleBasemap.type')"></h5>   
-                <div clas="form-check" style="width:300px;height:380px;overflow:auto;">       
+                <div clas="form-check" style="width:300px;height:380px;overflow:auto;">      
                     <div class="btn-group-vertical">
                         <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBuy" aria-expanded="false" aria-controls="collapseExample" v-html="$t('simpleBasemap.Type1.title')"></button>
                             <div class="collapse" id="collapseBuy">
