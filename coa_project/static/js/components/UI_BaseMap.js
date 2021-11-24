@@ -82,7 +82,7 @@ define([],function(){
                     var self = this; 
                     //指定類別分類
                     var layerstyle = self.classifyattributes +'_'+ self.class_method + '_' + self.classnumbers;
-                    this.taoyuanLayer = L.tileLayer.wms("http://localhost:8080/geoserver/taoyuan/wms", {
+                    this.taoyuanLayer = L.tileLayer.wms("http://35.76.62.63:8000/geoserver/taoyuan/wms", {
                         layers: self.classifyattributes ,
                         format: 'image/png',
                         transparent: true,
@@ -94,7 +94,7 @@ define([],function(){
                     });
                     this.taoyuanLayer.addTo(map);           
                     //加入圖例
-                    var legend_url ='http://localhost:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + self.classifyattributes;
+                    var legend_url ='http://35.76.62.63:8000/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + self.classifyattributes;
                     this.legend = L.wmsLegend(legend_url);
                     this.legend.addTo(map); 
                 },
