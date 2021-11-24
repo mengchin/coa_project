@@ -387,7 +387,7 @@ define([],function(){
                 //********各類圖層設定 *********/
                 addParcelLayer:function(){
                     var self= this;
-                    this.taoyuanParcelLayer = L.tileLayer.betterWms("http://localhost:8080/geoserver/COA/wms", {
+                    this.taoyuanParcelLayer = L.tileLayer.betterWms("http://35.76.62.63:8000/geoserver/COA/wms", {
                         layers: 'COA:'+self.county+'_parcel' ,
                         format: 'image/png',
                         transparent: true,
@@ -424,7 +424,7 @@ define([],function(){
                 },            
                 addAreaLayer:function(){
                     var self = this;
-                    this.AreaLayer = L.tileLayer.wms("http://localhost:8080/geoserver/COA/wms", {
+                    this.AreaLayer = L.tileLayer.wms("http://35.76.62.63:8000/geoserver/COA/wms", {
                         layers: 'COA:'+self.county+'_area_static',
                         format: 'image/png',
                         transparent: true,
@@ -433,7 +433,7 @@ define([],function(){
                         attribution:'Taoyuan Area Size',
                     }).addTo(map);           
                     //加入圖例
-                    var legend_url ='http://localhost:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + 'COA:'+self.county+'_area_static';
+                    var legend_url ='http://35.76.62.63:8000/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + 'COA:'+self.county+'_area_static';
                     this.AreaLegend = L.wmsLegend(legend_url);
                     this.AreaLegend.addTo(map);    
                     if (self.county == "taoyuan") {
